@@ -30,7 +30,6 @@ type Juoma {
   katkerot: String
   energia100ML: String
   valikoima: String
-  EAN: String
 }
 
 type Hinta {
@@ -79,7 +78,6 @@ input UusiJuoma {
   katkerot: String
   energia100ML: String
   valikoima: String
-  EAN: String
 }
 
 type Mutation {

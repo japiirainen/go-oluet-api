@@ -56,7 +56,6 @@ type ComplexityRoot struct {
 		AlkoholiProsentti      func(childComplexity int) int
 		Alue                   func(childComplexity int) int
 		Date                   func(childComplexity int) int
-		Ean                    func(childComplexity int) int
 		Energia100ml           func(childComplexity int) int
 		ErityisRyhma           func(childComplexity int) int
 		EtikettiMerkintoja     func(childComplexity int) int
@@ -178,13 +177,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Juoma.Date(childComplexity), true
-
-	case "Juoma.EAN":
-		if e.complexity.Juoma.Ean == nil {
-			break
-		}
-
-		return e.complexity.Juoma.Ean(childComplexity), true
 
 	case "Juoma.energia100ML":
 		if e.complexity.Juoma.Energia100ml == nil {
@@ -541,7 +533,6 @@ scalar Upload
   katkerot: String
   energia100ML: String
   valikoima: String
-  EAN: String
 }
 
 type Hinta {
@@ -590,7 +581,6 @@ input UusiJuoma {
   katkerot: String
   energia100ML: String
   valikoima: String
-  EAN: String
 }
 
 type Mutation {
@@ -1824,38 +1814,6 @@ func (ec *executionContext) _Juoma_valikoima(ctx context.Context, field graphql.
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Valikoima, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Juoma_EAN(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Juoma",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Ean, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3477,14 +3435,6 @@ func (ec *executionContext) unmarshalInputUusiJuoma(ctx context.Context, obj int
 			if err != nil {
 				return it, err
 			}
-		case "EAN":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("EAN"))
-			it.Ean, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		}
 	}
 
@@ -3617,8 +3567,6 @@ func (ec *executionContext) _Juoma(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Juoma_energia100ML(ctx, field, obj)
 		case "valikoima":
 			out.Values[i] = ec._Juoma_valikoima(ctx, field, obj)
-		case "EAN":
-			out.Values[i] = ec._Juoma_EAN(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
