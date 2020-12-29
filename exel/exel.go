@@ -1,4 +1,4 @@
-package main
+package exel
 
 import (
 	"fmt"
@@ -7,54 +7,56 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"github.com/japiirainen/go-oluet-api/helpers"
 )
 
-var fileLocation = filepath.Join("exel", "data", "alkoFile.xlsx")
+//FileLocation is the location of the prie file
+var FileLocation = filepath.Join("exel", "data", "alkoFile.xlsx")
 
-const alkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Site/-/Alko-OnlineShop/fi_FI/Alkon%20Hinnasto%20Tekstitiedostona/alkon-hinnasto-tekstitiedostona.xlsx"
+//AlkoFileURI is the URI that the price file gets downloaded from
+const AlkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Site/-/Alko-OnlineShop/fi_FI/Alkon%20Hinnasto%20Tekstitiedostona/alkon-hinnasto-tekstitiedostona.xlsx"
 
 // Juoma is a type for one drink
 type Juoma struct {
-	date                   time.Time
-	productID              string
-	nimi                   string
-	valmistaja             string
-	pulloKoko              string
-	hinta                  float64
-	litraHinta             float64
-	uutuus                 string
-	hinnastoJarjestysKoodi string
-	tyyppi                 string
-	alaTyyppi              string
-	erityisRyhma           string
-	olutTyyppi             string
-	valmistusMaa           string
-	alue                   string
-	vuosiKerta             string
-	etikettiMerkintoja     string
-	huomautus              string
-	rypaleet               string
-	luonnehdinta           string
-	pakkausTyyppi          string
-	suljentaTyyppi         string
-	alkoholiProsentti      string
-	hapotGl                string
-	sokeriGl               int
-	kantavierrep           float64
-	vari                   string
-	katkerot               string
-	energia100ml           string
-	valikoima              string
+	Date                   time.Time
+	ProductID              string
+	Nimi                   string
+	Valmistaja             string
+	PulloKoko              string
+	Hinta                  float64
+	LitraHinta             float64
+	Uutuus                 string
+	HinnastoJarjestysKoodi string
+	Tyyppi                 string
+	AlaTyyppi              string
+	ErityisRyhma           string
+	OlutTyyppi             string
+	ValmistusMaa           string
+	Alue                   string
+	VuosiKerta             string
+	EtikettiMerkintoja     string
+	Huomautus              string
+	Rypaleet               string
+	Luonnehdinta           string
+	PakkausTyyppi          string
+	SuljentaTyyppi         string
+	AlkoholiProsentti      string
+	HapotGl                string
+	SokeriGl               int
+	Kantavierrep           float64
+	Vari                   string
+	Katkerot               string
+	Energia100ml           string
+	Valikoima              string
 }
 
 //ReadXlsx returns all data from alko price file.
 func ReadXlsx() ([]Juoma, error) {
-	f, err := excelize.OpenFile(fileLocation)
+	f, err := excelize.OpenFile(FileLocation)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,14 +67,39 @@ func ReadXlsx() ([]Juoma, error) {
 	res := []Juoma{}
 
 	date := strings.TrimPrefix(rows[0][0], "Alkon hinnasto ")
-	parsedDate := parseTime(date)
+	parsedDate := helpers.ParseTime(date)
 
 	for _, row := range rows[4:] {
-		temp := Juoma{date: parsedDate, productID: row[0], nimi: row[1], valmistaja: row[2], pulloKoko: row[3], hinta: toFloat(row[4]),
-			litraHinta: toFloat(row[5]), uutuus: row[6], hinnastoJarjestysKoodi: row[7], tyyppi: row[8], alaTyyppi: row[9], erityisRyhma: row[10],
-			olutTyyppi: row[11], valmistusMaa: row[12], alue: row[13], vuosiKerta: row[14], etikettiMerkintoja: row[15], huomautus: row[16],
-			rypaleet: row[17], luonnehdinta: row[18], pakkausTyyppi: row[19], suljentaTyyppi: row[20], alkoholiProsentti: row[21], hapotGl: row[22],
-			sokeriGl: toInt(row[23]), kantavierrep: toFloat(row[24]), vari: row[25], katkerot: row[26], energia100ml: row[27], valikoima: row[28]}
+		temp := Juoma{Date: parsedDate,
+			ProductID:              row[0],
+			Nimi:                   row[1],
+			Valmistaja:             row[2],
+			PulloKoko:              row[3],
+			Hinta:                  helpers.ToFloat(row[4]),
+			LitraHinta:             helpers.ToFloat(row[5]),
+			Uutuus:                 row[6],
+			HinnastoJarjestysKoodi: row[7],
+			Tyyppi:                 row[8],
+			AlaTyyppi:              row[9],
+			ErityisRyhma:           row[10],
+			OlutTyyppi:             row[11],
+			ValmistusMaa:           row[12],
+			Alue:                   row[13],
+			VuosiKerta:             row[14],
+			EtikettiMerkintoja:     row[15],
+			Huomautus:              row[16],
+			Rypaleet:               row[17],
+			Luonnehdinta:           row[18],
+			PakkausTyyppi:          row[19],
+			SuljentaTyyppi:         row[20],
+			AlkoholiProsentti:      row[21],
+			HapotGl:                row[22],
+			SokeriGl:               helpers.ToInt(row[23]),
+			Kantavierrep:           helpers.ToFloat(row[24]),
+			Vari:                   row[25],
+			Katkerot:               row[26],
+			Energia100ml:           row[27],
+			Valikoima:              row[28]}
 		res = append(res, temp)
 	}
 	return res, nil
@@ -94,33 +121,6 @@ func Download(filepath string, url string) error {
 	}
 	defer out.Close()
 	_, err = io.Copy(out, resp.Body)
-	fmt.Println("Done downloading file: " + alkoFileURI)
+	fmt.Println("Done downloading file: " + AlkoFileURI)
 	return err
-}
-
-func main() {
-	// err := Download(fileLocation, alkoFileURI)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	_, error := ReadXlsx()
-	if error != nil {
-		panic("error reading file")
-	}
-}
-
-func toFloat(v string) float64 {
-	res, _ := strconv.ParseFloat(v, 64)
-	return res
-}
-
-func toInt(v string) int {
-	res, _ := strconv.Atoi(v)
-	return res
-}
-
-func parseTime(timeStr string) time.Time {
-	time, _ := time.Parse("2006-Jan-02", timeStr)
-	return time
 }
