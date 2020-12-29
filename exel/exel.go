@@ -8,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 )
@@ -18,6 +20,7 @@ const alkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Si
 
 // Juoma is a type for one drink
 type Juoma struct {
+	date                   time.Time
 	productID              string
 	nimi                   string
 	valmistaja             string
@@ -60,8 +63,12 @@ func ReadXlsx() ([]Juoma, error) {
 		log.Fatal(err)
 	}
 	res := []Juoma{}
+
+	date := strings.TrimPrefix(rows[0][0], "Alkon hinnasto ")
+	parsedDate := parseTime(date)
+
 	for _, row := range rows[4:] {
-		temp := Juoma{productID: row[0], nimi: row[1], valmistaja: row[2], pulloKoko: row[3], hinta: toFloat(row[4]),
+		temp := Juoma{date: parsedDate, productID: row[0], nimi: row[1], valmistaja: row[2], pulloKoko: row[3], hinta: toFloat(row[4]),
 			litraHinta: toFloat(row[5]), uutuus: row[6], hinnastoJarjestysKoodi: row[7], tyyppi: row[8], alaTyyppi: row[9], erityisRyhma: row[10],
 			olutTyyppi: row[11], valmistusMaa: row[12], alue: row[13], vuosiKerta: row[14], etikettiMerkintoja: row[15], huomautus: row[16],
 			rypaleet: row[17], luonnehdinta: row[18], pakkausTyyppi: row[19], suljentaTyyppi: row[20], alkoholiProsentti: row[21], hapotGl: row[22],
@@ -92,10 +99,10 @@ func Download(filepath string, url string) error {
 }
 
 func main() {
-	err := Download(fileLocation, alkoFileURI)
-	if err != nil {
-		panic(err)
-	}
+	// err := Download(fileLocation, alkoFileURI)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	_, error := ReadXlsx()
 	if error != nil {
@@ -111,4 +118,9 @@ func toFloat(v string) float64 {
 func toInt(v string) int {
 	res, _ := strconv.Atoi(v)
 	return res
+}
+
+func parseTime(timeStr string) time.Time {
+	time, _ := time.Parse("2006-Jan-02", timeStr)
+	return time
 }
