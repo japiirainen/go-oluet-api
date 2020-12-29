@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 )
@@ -21,8 +22,8 @@ type Juoma struct {
 	nimi                   string
 	valmistaja             string
 	pulloKoko              string
-	hinta                  string
-	litraHinta             string
+	hinta                  float64
+	litraHinta             float64
 	uutuus                 string
 	hinnastoJarjestysKoodi string
 	tyyppi                 string
@@ -40,8 +41,8 @@ type Juoma struct {
 	suljentaTyyppi         string
 	alkoholiProsentti      string
 	hapotGl                string
-	sokeriGl               string
-	kantavierrep           string
+	sokeriGl               int
+	kantavierrep           float64
 	vari                   string
 	katkerot               string
 	energia100ml           string
@@ -60,11 +61,11 @@ func ReadXlsx() ([]Juoma, error) {
 	}
 	res := []Juoma{}
 	for _, row := range rows[4:] {
-		temp := Juoma{productID: row[0], nimi: row[1], valmistaja: row[2], pulloKoko: row[3], hinta: row[4],
-			litraHinta: row[5], uutuus: row[6], hinnastoJarjestysKoodi: row[7], tyyppi: row[8], alaTyyppi: row[9], erityisRyhma: row[10],
+		temp := Juoma{productID: row[0], nimi: row[1], valmistaja: row[2], pulloKoko: row[3], hinta: toFloat(row[4]),
+			litraHinta: toFloat(row[5]), uutuus: row[6], hinnastoJarjestysKoodi: row[7], tyyppi: row[8], alaTyyppi: row[9], erityisRyhma: row[10],
 			olutTyyppi: row[11], valmistusMaa: row[12], alue: row[13], vuosiKerta: row[14], etikettiMerkintoja: row[15], huomautus: row[16],
 			rypaleet: row[17], luonnehdinta: row[18], pakkausTyyppi: row[19], suljentaTyyppi: row[20], alkoholiProsentti: row[21], hapotGl: row[22],
-			sokeriGl: row[23], kantavierrep: row[24], vari: row[25], katkerot: row[26], energia100ml: row[27], valikoima: row[28]}
+			sokeriGl: toInt(row[23]), kantavierrep: toFloat(row[24]), vari: row[25], katkerot: row[26], energia100ml: row[27], valikoima: row[28]}
 		res = append(res, temp)
 	}
 	return res, nil
@@ -86,6 +87,7 @@ func Download(filepath string, url string) error {
 	}
 	defer out.Close()
 	_, err = io.Copy(out, resp.Body)
+	fmt.Println("Done downloading file: " + alkoFileURI)
 	return err
 }
 
@@ -94,5 +96,19 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Done downloading file: " + alkoFileURI)
+
+	_, error := ReadXlsx()
+	if error != nil {
+		panic("error reading file")
+	}
+}
+
+func toFloat(v string) float64 {
+	res, _ := strconv.ParseFloat(v, 64)
+	return res
+}
+
+func toInt(v string) int {
+	res, _ := strconv.Atoi(v)
+	return res
 }
