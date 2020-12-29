@@ -1,13 +1,19 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"log"
+	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 )
 
-var fileLocation = filepath.Join("exel", "data", "alkon-hinnasto-tekstitiedostona.xlsx")
+var fileLocation = filepath.Join("exel", "data", "alkoFile.xlsx")
+
+const alkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Site/-/Alko-OnlineShop/fi_FI/Alkon%20Hinnasto%20Tekstitiedostona/alkon-hinnasto-tekstitiedostona.xlsx"
 
 // Juoma is a type for one drink
 type Juoma struct {
@@ -42,7 +48,8 @@ type Juoma struct {
 	valikoima              string
 }
 
-func read() ([]Juoma, error) {
+//ReadXlsx returns all data from alko price file.
+func ReadXlsx() ([]Juoma, error) {
 	f, err := excelize.OpenFile(fileLocation)
 	if err != nil {
 		log.Fatal(err)
@@ -63,9 +70,29 @@ func read() ([]Juoma, error) {
 	return res, nil
 }
 
-func main() {
-	_, e := read()
-	if e != nil {
-		log.Fatal(e)
+// Download loads the file using http
+func Download(filepath string, url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
 	}
+
+	defer resp.Body.Close()
+
+	out, err := os.Create(filepath)
+
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+	_, err = io.Copy(out, resp.Body)
+	return err
+}
+
+func main() {
+	err := Download(fileLocation, alkoFileURI)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Done downloading file: " + alkoFileURI)
 }
