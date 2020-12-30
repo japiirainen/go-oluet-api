@@ -39,8 +39,9 @@ type Juoma struct {
 	Valikoima              string    `json:"valikoima"`
 }
 
+// UusiJuoma is the type of one new juoma
 type UusiJuoma struct {
-	ID                     string    `json:"id"`
+	ID                     int       `json:"id"`
 	Date                   time.Time `json:"date"`
 	ProductID              string    `json:"productId"`
 	Nimi                   string    `json:"nimi"`
