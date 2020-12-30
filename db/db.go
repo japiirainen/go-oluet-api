@@ -11,6 +11,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Connect makes a postgres connection
 func Connect() {
 	err := godotenv.Load(".env")
 	if err != nil {
