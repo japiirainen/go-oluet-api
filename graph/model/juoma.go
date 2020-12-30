@@ -4,8 +4,9 @@ import (
 	"time"
 )
 
+// Juoma is the type of one juoma
 type Juoma struct {
-	ID                     string    `json:"id"`
+	ID                     int       `json:"id"`
 	Date                   time.Time `json:"date"`
 	ProductID              string    `json:"productId"`
 	Nimi                   string    `json:"nimi"`

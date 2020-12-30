@@ -31,7 +31,7 @@ func (r *queryResolver) Hinta(ctx context.Context, id string) (*model.Hinta, err
 func (r *queryResolver) Hinnat(ctx context.Context) ([]*model.Hinta, error) {
 	var hinnat []*model.Hinta
 	dummyHinta := model.Hinta{
-		ID:        "1",
+		ID:        1,
 		Date:      time.Now(),
 		ProductID: "1337",
 		Hinta:     10.5,

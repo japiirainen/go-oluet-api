@@ -4,11 +4,10 @@ import (
 	"time"
 )
 
+//Hinta is the type of one hinta
 type Hinta struct {
-	ID        string    `json:"id"`
+	ID        int       `json:"id"`
 	Date      time.Time `json:"date"`
 	ProductID string    `json:"productId"`
-	Hinta     float64  `json:"hinta"`
+	Hinta     float64   `json:"hinta"`
 }
-
-
