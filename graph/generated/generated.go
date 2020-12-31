@@ -86,7 +86,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		UusiJuoma func(childComplexity int, input model.UusiJuoma) int
+		DailyJuomas func(childComplexity int) int
 	}
 
 	Query struct {
@@ -98,7 +98,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	UusiJuoma(ctx context.Context, input model.UusiJuoma) (*model.Juoma, error)
+	DailyJuomas(ctx context.Context) (string, error)
 }
 type QueryResolver interface {
 	Juoma(ctx context.Context, id string) (*model.Juoma, error)
@@ -367,17 +367,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Juoma.VuosiKerta(childComplexity), true
 
-	case "Mutation.uusiJuoma":
-		if e.complexity.Mutation.UusiJuoma == nil {
+	case "Mutation.dailyJuomas":
+		if e.complexity.Mutation.DailyJuomas == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_uusiJuoma_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UusiJuoma(childComplexity, args["input"].(model.UusiJuoma)), true
+		return e.complexity.Mutation.DailyJuomas(childComplexity), true
 
 	case "Query.Hinnat":
 		if e.complexity.Query.Hinnat == nil {
@@ -501,7 +496,18 @@ scalar Any
 # }
 scalar Upload
 `, BuiltIn: false},
-	{Name: "graph/schema/schema.graphql", Input: `type Juoma {
+	{Name: "graph/schema/schema.graphql", Input: `type Query {
+  Juoma(ID: ID!): Juoma!
+  Juomat: [Juoma!]!
+  Hinta(ID: ID!): Hinta!
+  Hinnat: [Hinta!]!
+}
+
+type Mutation {
+  dailyJuomas: String!
+}
+
+type Juoma {
   id: ID!
   date: Time!
   productId: String
@@ -541,51 +547,6 @@ type Hinta {
   productId: String!
   hinta: Float
 }
-
-type Query {
-  Juoma(ID: ID!): Juoma!
-  Juomat: [Juoma!]!
-  Hinta(ID: ID!): Hinta!
-  Hinnat: [Hinta!]!
-}
-
-input UusiJuoma {
-  id: ID!
-  date: Time!
-  productId: String
-  nimi: String
-  valmistaja: String
-  pulloKoko: String
-  hinta: Float
-  litraHinta: Float
-  uutuus: String
-  hinnastoJarjestysKoodi: String
-  tyyppi: String
-  alaTyyppi: String
-  erityisRyhma: String
-  olutTyyppi: String
-  valmistusMaa: String
-  alue: String
-  vuosiKerta: String
-  etikettiMerkintoja: String
-  huomautus: String
-  rypaleet: String
-  luonnehdinta: String
-  pakkausTyyppi: String
-  suljentaTyyppi: String
-  alkoholiProsentti: String
-  hapotGL: String
-  sokeriGL: Int
-  kantavierrep: Float
-  vari: String
-  katkerot: String
-  energia100ML: String
-  valikoima: String
-}
-
-type Mutation {
-  uusiJuoma(input: UusiJuoma!): Juoma!
-}
 `, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -593,21 +554,6 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
-
-func (ec *executionContext) field_Mutation_uusiJuoma_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 model.UusiJuoma
-	if tmp, ok := rawArgs["input"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUusiJuoma2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐUusiJuoma(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
 
 func (ec *executionContext) field_Query_Hinta_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -1827,7 +1773,7 @@ func (ec *executionContext) _Juoma_valikoima(ctx context.Context, field graphql.
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_uusiJuoma(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_dailyJuomas(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1843,16 +1789,9 @@ func (ec *executionContext) _Mutation_uusiJuoma(ctx context.Context, field graph
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_uusiJuoma_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UusiJuoma(rctx, args["input"].(model.UusiJuoma))
+		return ec.resolvers.Mutation().DailyJuomas(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1864,9 +1803,9 @@ func (ec *executionContext) _Mutation_uusiJuoma(ctx context.Context, field graph
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Juoma)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNJuoma2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuoma(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_Juoma(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3181,266 +3120,6 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputUusiJuoma(ctx context.Context, obj interface{}) (model.UusiJuoma, error) {
-	var it model.UusiJuoma
-	var asMap = obj.(map[string]interface{})
-
-	for k, v := range asMap {
-		switch k {
-		case "id":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-			it.ID, err = ec.unmarshalNID2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "date":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("date"))
-			it.Date, err = ec.unmarshalNTime2timeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "productId":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productId"))
-			it.ProductID, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "nimi":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("nimi"))
-			it.Nimi, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "valmistaja":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("valmistaja"))
-			it.Valmistaja, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "pulloKoko":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pulloKoko"))
-			it.PulloKoko, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "hinta":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hinta"))
-			it.Hinta, err = ec.unmarshalOFloat2float64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "litraHinta":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("litraHinta"))
-			it.LitraHinta, err = ec.unmarshalOFloat2float64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "uutuus":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uutuus"))
-			it.Uutuus, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "hinnastoJarjestysKoodi":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hinnastoJarjestysKoodi"))
-			it.HinnastoJarjestysKoodi, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "tyyppi":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tyyppi"))
-			it.Tyyppi, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "alaTyyppi":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alaTyyppi"))
-			it.AlaTyyppi, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "erityisRyhma":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("erityisRyhma"))
-			it.ErityisRyhma, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "olutTyyppi":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("olutTyyppi"))
-			it.OlutTyyppi, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "valmistusMaa":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("valmistusMaa"))
-			it.ValmistusMaa, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "alue":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alue"))
-			it.Alue, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "vuosiKerta":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vuosiKerta"))
-			it.VuosiKerta, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "etikettiMerkintoja":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("etikettiMerkintoja"))
-			it.EtikettiMerkintoja, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "huomautus":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("huomautus"))
-			it.Huomautus, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "rypaleet":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("rypaleet"))
-			it.Rypaleet, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "luonnehdinta":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("luonnehdinta"))
-			it.Luonnehdinta, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "pakkausTyyppi":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pakkausTyyppi"))
-			it.PakkausTyyppi, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "suljentaTyyppi":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("suljentaTyyppi"))
-			it.SuljentaTyyppi, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "alkoholiProsentti":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("alkoholiProsentti"))
-			it.AlkoholiProsentti, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "hapotGL":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hapotGL"))
-			it.HapotGl, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "sokeriGL":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sokeriGL"))
-			it.SokeriGl, err = ec.unmarshalOInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "kantavierrep":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("kantavierrep"))
-			it.Kantavierrep, err = ec.unmarshalOFloat2float64(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "vari":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vari"))
-			it.Vari, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "katkerot":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("katkerot"))
-			it.Katkerot, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "energia100ML":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("energia100ML"))
-			it.Energia100ml, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "valikoima":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("valikoima"))
-			it.Valikoima, err = ec.unmarshalOString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -3593,8 +3272,8 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "uusiJuoma":
-			out.Values[i] = ec._Mutation_uusiJuoma(ctx, field)
+		case "dailyJuomas":
+			out.Values[i] = ec._Mutation_dailyJuomas(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -4115,11 +3794,6 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) unmarshalNUusiJuoma2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐUusiJuoma(ctx context.Context, v interface{}) (model.UusiJuoma, error) {
-	res, err := ec.unmarshalInputUusiJuoma(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

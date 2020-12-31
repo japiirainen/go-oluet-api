@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"database/sql"
@@ -11,8 +11,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// Connect makes a postgres connection
-func Connect() {
+//Db is the database connection
+var Db *sql.DB
+
+// Init makes a postgres connection
+func Init() {
 	err := godotenv.Load(".env")
 	if err != nil {
 		fmt.Printf("%s", err)
@@ -29,8 +32,12 @@ func Connect() {
 	// open database
 	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
-		log.Fatalf("%s", err)
+		log.Panic(err)
 	}
 
-	defer db.Close()
+	if err = db.Ping(); err != nil {
+		log.Panic(err)
+	}
+	println("postgres connection succesful")
+	Db = db
 }
