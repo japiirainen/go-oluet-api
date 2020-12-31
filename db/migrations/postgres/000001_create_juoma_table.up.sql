@@ -1,6 +1,28 @@
-CREATE TABLE IF NOT EXISTS Hinta(
-    ID INT NOT NULL UNIQUE AUTO_INCREMENT,
-    Username VARCHAR (127) NOT NULL UNIQUE,
-    Password VARCHAR (127) NOT NULL,
-    PRIMARY KEY (ID)
+CREATE TABLE IF NOT EXISTS Juoma(
+    ID serial PRIMARY KEY,
+    Date DATE NOT NULL,
+    ProductID VARCHAR (50) NOT NULL,
+    Nimi VARCHAR (50), 
+    Valmistaja VARCHAR (50), 
+    Pullokoko VARCHAR (50), 
+    Hinta DOUBLE PRECISION,
+    LitraHinta DOUBLE PRECISION,
+    Uutuus VARCHAR (50),
+    HinnastoJarjestysKoodi VARCHAR (50),
+    Tyyppi VARCHAR (50),
+    AlaTyyppi VARCHAR (50),
+    ErityisRyhmä VARCHAR (50),
+    EtikettiMerkintoja VARCHAR (50),
+    Huomautus VARCHAR (50),
+    Rypaleet VARCHAR (50),
+    Luonnehdita VARCHAR (50),
+    PakkausTyyppo VARCHAR (50),
+    SuljentaTyyppi VARCHAR (50),
+    AlkoholiProsentti VARCHAR (50),
+    HapotGL INTEGER,
+    Kantavierrep DOUBLE PRECISION,
+    Vari VARCHAR (50),
+    Katkerot VARCHAR (50),
+    Energia100ml VARCHAR (50),
+    Valikoima VARCHAR (50)
 )

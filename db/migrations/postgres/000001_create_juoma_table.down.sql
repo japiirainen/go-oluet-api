@@ -1,1 +1,1 @@
-DROP TABLE Hinta;
+DROP TABLE IF EXISTS Hinta;

@@ -15,5 +15,11 @@ start:
 build:
 	- go build -o main .
 
+migrate-up:
+	- migrate -database postgres://dev:dev@localhost:5432/oluet_api_dev?sslmode=disable -path db/migrations/postgres up
+
+migrate-down:
+	- migrate -database postgres://dev:dev@localhost:5432/oluet_api_dev?sslmode=disable -path db/migrations/postgres down
+
 
 .PHONY: compose-app compose-dbs gen build

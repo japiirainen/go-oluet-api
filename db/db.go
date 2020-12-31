@@ -34,7 +34,3 @@ func Connect() {
 
 	defer db.Close()
 }
-
-func main() {
-	Connect()
-}
