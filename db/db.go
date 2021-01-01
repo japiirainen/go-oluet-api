@@ -56,15 +56,42 @@ func (db *Db) InsertManyJuomas() (string, error) {
 		log.Fatal(err)
 		return "err during exel read", err
 	}
-	stmt, err := db.conn.Prepare("INSERT INTO Juoma(Date, ProductID, Nimi, Valmistaja, PulloKoko, Hinta, LitraHinta, Uutuus, HinnastoJarjestysKoodi, Tyyppi, AlaTyyppi, ErityisRyhma, OlutTyyppi, ValmistusMaa, Alue, VuosiKerta, EtikettiMerkintoja, Huomautus, Rypaleet, Luonnehdinta, PakkausTyyppi, SuljentaTyyppi, AlkoholiProsentti, HapotGl, SokeriGL, Kantavierrep, Vari, Katkerot, Energia100ml, Valikoima) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);")
-	if err != nil {
-		log.Fatal(err)
-		return "err during prepare", err
+	stmt, prepErr := db.conn.Prepare("INSERT INTO Juoma (Date," +
+		" ProductID," +
+		" Nimi," +
+		" Valmistaja," +
+		" PulloKoko," +
+		" Hinta," +
+		" LitraHinta," +
+		" Uutuus," +
+		" HinnastoJarjestysKoodi," +
+		" Tyyppi," +
+		" AlaTyyppi," +
+		" ErityisRyhma," +
+		" OlutTyyppi," +
+		" ValmistusMaa," +
+		" Alue," +
+		" VuosiKerta," +
+		" EtikettiMerkintoja," +
+		" Huomautus," +
+		" Rypaleet," +
+		" Luonnehdinta," +
+		" PakkausTyyppi," +
+		" SuljentaTyyppi," +
+		" AlkoholiProsentti," +
+		" HapotGl," +
+		" SokeriGL," +
+		" Kantavierrep," +
+		" Vari," +
+		" Katkerot," +
+		" Energia100ml," +
+		" Valikoima) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);")
+	if prepErr != nil {
+		log.Fatal(prepErr)
 	}
 	defer stmt.Close()
 
 	for _, v := range val {
-		fmt.Printf("%v+", v)
 		_, err := stmt.Exec(v.Date, v.ProductID, v.Nimi, v.Valikoima, v.PulloKoko, v.Hinta, v.LitraHinta, v.Uutuus, v.HinnastoJarjestysKoodi, v.Tyyppi, v.AlaTyyppi, v.ErityisRyhma, v.OlutTyyppi, v.ValmistusMaa, v.Alue, v.VuosiKerta, v.EtikettiMerkintoja, v.Huomautus, v.Rypaleet, v.Luonnehdinta, v.PakkausTyyppi, v.SuljentaTyyppi, v.AlkoholiProsentti, v.HapotGl, v.SokeriGl, v.Kantavierrep, v.Vari, v.Katkerot, v.Energia100ml, v.Valikoima)
 		if err != nil {
 			log.Fatal(err)
