@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,6 +20,12 @@ func ToInt(v string) int {
 
 //ParseTime converts string values to time.Time
 func ParseTime(timeStr string) time.Time {
-	time, _ := time.Parse("2006-Jan-02", timeStr)
-	return time
+	t := strings.Split(timeStr, ".")
+	dd := t[0]
+	mm := t[1]
+	yyyy := t[2]
+	formatted := yyyy + "-" + mm + "-" + dd
+	println(formatted)
+	myDate, _ := time.Parse("2006-01-02", formatted)
+	return myDate
 }
