@@ -86,7 +86,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		DailyJuomas func(childComplexity int) int
+		NewJuomas func(childComplexity int) int
 	}
 
 	Query struct {
@@ -98,7 +98,7 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	DailyJuomas(ctx context.Context) (string, error)
+	NewJuomas(ctx context.Context) (string, error)
 }
 type QueryResolver interface {
 	Juoma(ctx context.Context, id string) (*model.Juoma, error)
@@ -367,12 +367,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Juoma.VuosiKerta(childComplexity), true
 
-	case "Mutation.dailyJuomas":
-		if e.complexity.Mutation.DailyJuomas == nil {
+	case "Mutation.newJuomas":
+		if e.complexity.Mutation.NewJuomas == nil {
 			break
 		}
 
-		return e.complexity.Mutation.DailyJuomas(childComplexity), true
+		return e.complexity.Mutation.NewJuomas(childComplexity), true
 
 	case "Query.Hinnat":
 		if e.complexity.Query.Hinnat == nil {
@@ -504,7 +504,7 @@ scalar Upload
 }
 
 type Mutation {
-  dailyJuomas: String!
+  newJuomas: String!
 }
 
 type Juoma {
@@ -1773,7 +1773,7 @@ func (ec *executionContext) _Juoma_valikoima(ctx context.Context, field graphql.
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_dailyJuomas(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_newJuomas(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1791,7 +1791,7 @@ func (ec *executionContext) _Mutation_dailyJuomas(ctx context.Context, field gra
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DailyJuomas(rctx)
+		return ec.resolvers.Mutation().NewJuomas(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3272,8 +3272,8 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "dailyJuomas":
-			out.Values[i] = ec._Mutation_dailyJuomas(ctx, field)
+		case "newJuomas":
+			out.Values[i] = ec._Mutation_newJuomas(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

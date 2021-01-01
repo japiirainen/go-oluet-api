@@ -6,7 +6,7 @@ type Query {
 }
 
 type Mutation {
-  dailyJuomas: String!
+  newJuomas: String!
 }
 
 type Juoma {

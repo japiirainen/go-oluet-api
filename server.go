@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/japiirainen/go-oluet-api/db"
-
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/japiirainen/go-oluet-api/graph"
@@ -20,7 +18,6 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
-	db.Init()
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
