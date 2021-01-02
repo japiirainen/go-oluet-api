@@ -16,7 +16,7 @@ type Juoma {
   nimi: String
   valmistaja: String
   pulloKoko: String
-  hinta: Float
+  hinta: Float!
   litraHinta: Float
   uutuus: String
   hinnastoJarjestysKoodi: String
@@ -47,5 +47,5 @@ type Hinta {
   id: ID!
   date: Time!
   productId: String!
-  hinta: Float
+  hinta: Float!
 }

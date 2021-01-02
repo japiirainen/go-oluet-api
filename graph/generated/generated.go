@@ -514,7 +514,7 @@ type Juoma {
   nimi: String
   valmistaja: String
   pulloKoko: String
-  hinta: Float
+  hinta: Float!
   litraHinta: Float
   uutuus: String
   hinnastoJarjestysKoodi: String
@@ -545,7 +545,7 @@ type Hinta {
   id: ID!
   date: Time!
   productId: String!
-  hinta: Float
+  hinta: Float!
 }
 `, BuiltIn: false},
 }
@@ -768,11 +768,14 @@ func (ec *executionContext) _Hinta_hinta(ctx context.Context, field graphql.Coll
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalOFloat2float64(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Juoma_id(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
@@ -998,11 +1001,14 @@ func (ec *executionContext) _Juoma_hinta(ctx context.Context, field graphql.Coll
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(float64)
 	fc.Result = res
-	return ec.marshalOFloat2float64(ctx, field.Selections, res)
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Juoma_litraHinta(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
@@ -3156,6 +3162,9 @@ func (ec *executionContext) _Hinta(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "hinta":
 			out.Values[i] = ec._Hinta_hinta(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3198,6 +3207,9 @@ func (ec *executionContext) _Juoma(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Juoma_pulloKoko(ctx, field, obj)
 		case "hinta":
 			out.Values[i] = ec._Juoma_hinta(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "litraHinta":
 			out.Values[i] = ec._Juoma_litraHinta(ctx, field, obj)
 		case "uutuus":
@@ -3626,6 +3638,21 @@ func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interf
 
 func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.SelectionSet, v bool) graphql.Marshaler {
 	res := graphql.MarshalBoolean(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	res, err := graphql.UnmarshalFloat(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloat(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
