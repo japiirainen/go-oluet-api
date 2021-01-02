@@ -11,7 +11,6 @@ import (
 	"github.com/japiirainen/go-oluet-api/exel"
 	"github.com/japiirainen/go-oluet-api/helpers"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq"
 )
 
 //Db is the database connection
@@ -50,6 +49,7 @@ func Connect() *Db {
 	}
 }
 
+//InsertManyJuomas reads the alko file and inserts everything to postgres
 func (db *Db) InsertManyJuomas() (string, error) {
 	val, err := exel.ReadXlsx()
 	if err != nil {
@@ -95,24 +95,26 @@ func (db *Db) InsertManyJuomas() (string, error) {
 		_, err := stmt.Exec(v.Date, v.ProductID, v.Nimi, v.Valikoima, v.PulloKoko, v.Hinta, v.LitraHinta, v.Uutuus, v.HinnastoJarjestysKoodi, v.Tyyppi, v.AlaTyyppi, v.ErityisRyhma, v.OlutTyyppi, v.ValmistusMaa, v.Alue, v.VuosiKerta, v.EtikettiMerkintoja, v.Huomautus, v.Rypaleet, v.Luonnehdinta, v.PakkausTyyppi, v.SuljentaTyyppi, v.AlkoholiProsentti, v.HapotGl, v.SokeriGl, v.Kantavierrep, v.Vari, v.Katkerot, v.Energia100ml, v.Valikoima)
 		if err != nil {
 			log.Fatal(err)
-			return "err during exec", err
 		}
 	}
 
 	return "OK", nil
 }
 
+// GetAllJuomas finds all the drinks
 func (db *Db) GetAllJuomas() ([]*model.Juoma, error) {
 	rows, err := db.conn.Query("SELECT * FROM Juoma;")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
+	println(rows)
 
+	//test with fewer items?
 	var juomat []*model.Juoma
 	for rows.Next() {
 		var juoma *model.Juoma
-		err := rows.Scan(&juoma.ID, &juoma.ProductID, &juoma.Nimi, &juoma.Valikoima, &juoma.PulloKoko, &juoma.Hinta, &juoma.LitraHinta, juoma.Uutuus, &juoma.HinnastoJarjestysKoodi, &juoma.Tyyppi, &juoma.AlaTyyppi, &juoma.ErityisRyhma, &juoma.OlutTyyppi, &juoma.ValmistusMaa, &juoma.Alue, &juoma.VuosiKerta, &juoma.EtikettiMerkintoja, &juoma.Huomautus, &juoma.Rypaleet, &juoma.Luonnehdinta, &juoma.PakkausTyyppi, &juoma.SuljentaTyyppi, &juoma.AlkoholiProsentti, &juoma.HapotGl, &juoma.SokeriGl, &juoma.Kantavierrep, &juoma.Vari, &juoma.Katkerot, &juoma.Energia100ml, &juoma.Valikoima)
+		err := rows.Scan(&juoma.ID, &juoma.Date, &juoma.ProductID, &juoma.Nimi, &juoma.Valikoima, &juoma.PulloKoko, &juoma.Hinta, &juoma.LitraHinta, juoma.Uutuus, &juoma.HinnastoJarjestysKoodi, &juoma.Tyyppi, &juoma.AlaTyyppi, &juoma.ErityisRyhma, &juoma.OlutTyyppi, &juoma.ValmistusMaa, &juoma.Alue, &juoma.VuosiKerta, &juoma.EtikettiMerkintoja, &juoma.Huomautus, &juoma.Rypaleet, &juoma.Luonnehdinta, &juoma.PakkausTyyppi, &juoma.SuljentaTyyppi, &juoma.AlkoholiProsentti, &juoma.HapotGl, &juoma.SokeriGl, &juoma.Kantavierrep, &juoma.Vari, &juoma.Katkerot, &juoma.Energia100ml, &juoma.Valikoima)
 		if err != nil {
 			log.Fatal(err)
 		}

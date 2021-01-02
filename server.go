@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/japiirainen/go-oluet-api/graph"
 	"github.com/japiirainen/go-oluet-api/graph/generated"
+	_ "github.com/lib/pq"
 )
 
 const defaultPort = "5000"
