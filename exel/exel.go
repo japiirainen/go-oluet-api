@@ -68,7 +68,6 @@ func ReadXlsx() ([]Juoma, error) {
 
 	date := strings.TrimPrefix(rows[0][0], "Alkon hinnasto ")
 	parsedDate := helpers.ParseTime(date)
-	log.Println(parsedDate)
 
 	for _, row := range rows[4:] {
 		temp := Juoma{Date: parsedDate,

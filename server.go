@@ -7,9 +7,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/japiirainen/go-oluet-api/db"
 	"github.com/japiirainen/go-oluet-api/graph"
 	"github.com/japiirainen/go-oluet-api/graph/generated"
-	_ "github.com/lib/pq"
 )
 
 const defaultPort = "5000"
@@ -19,7 +19,11 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	c := db.Connect()
+	defer c.CloseConnection()
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
+		DB: c,
+	}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

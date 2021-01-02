@@ -25,7 +25,6 @@ func ParseTime(timeStr string) time.Time {
 	mm := t[1]
 	yyyy := t[2]
 	formatted := yyyy + "-" + mm + "-" + dd
-	println(formatted)
 	myDate, _ := time.Parse("2006-01-02", formatted)
 	return myDate
 }

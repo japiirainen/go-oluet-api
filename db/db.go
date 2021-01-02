@@ -11,6 +11,7 @@ import (
 	"github.com/japiirainen/go-oluet-api/exel"
 	"github.com/japiirainen/go-oluet-api/helpers"
 	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 //Db is the database connection
@@ -47,6 +48,11 @@ func Connect() *Db {
 	return &Db{
 		conn: conn,
 	}
+}
+
+//CloseConnection closes the sql conection
+func (db *Db) CloseConnection() {
+	db.conn.Close()
 }
 
 //InsertManyJuomas reads the alko file and inserts everything to postgres
