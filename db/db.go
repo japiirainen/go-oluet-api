@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/japiirainen/go-oluet-api/graph/model"
 
@@ -62,6 +63,19 @@ func (db *Db) InsertManyJuomas() (string, error) {
 		log.Fatal(err)
 		return "err during exel read", err
 	}
+	OK, jerr := db.insertJuomas(&val)
+	if !OK {
+		log.Fatal(jerr)
+	}
+	OK2, herr := db.CreatePrices(&val)
+	if !OK2 {
+		log.Fatal(herr)
+	}
+	return "OK", nil
+}
+
+func (db *Db) insertJuomas(juomat *[]exel.Juoma) (OK bool, error error) {
+	defer helpers.Duration(time.Now(), "insertJuomas")
 	stmt, prepErr := db.conn.Prepare("INSERT INTO Juoma (Date," +
 		" ProductID," +
 		" Nimi," +
@@ -93,18 +107,16 @@ func (db *Db) InsertManyJuomas() (string, error) {
 		" Energia100ml," +
 		" Valikoima) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30);")
 	if prepErr != nil {
-		log.Fatal(prepErr)
+		return false, nil
 	}
 	defer stmt.Close()
-
-	for _, v := range val {
+	for _, v := range *juomat {
 		_, err := stmt.Exec(v.Date, v.ProductID, v.Nimi, v.Valikoima, v.PulloKoko, v.Hinta, v.LitraHinta, v.Uutuus, v.HinnastoJarjestysKoodi, v.Tyyppi, v.AlaTyyppi, v.ErityisRyhma, v.OlutTyyppi, v.ValmistusMaa, v.Alue, v.VuosiKerta, v.EtikettiMerkintoja, v.Huomautus, v.Rypaleet, v.Luonnehdinta, v.PakkausTyyppi, v.SuljentaTyyppi, v.AlkoholiProsentti, v.HapotGl, v.SokeriGl, v.Kantavierrep, v.Vari, v.Katkerot, v.Energia100ml, v.Valikoima)
 		if err != nil {
-			log.Fatal(err)
+			return false, err
 		}
 	}
-
-	return "OK", nil
+	return true, nil
 }
 
 // GetAllJuomas finds all the drinks
@@ -132,4 +144,20 @@ func (db *Db) GetAllJuomas() ([]*model.Juoma, error) {
 		log.Fatal(err)
 	}
 	return juomat, nil
+}
+
+//CreatePrices creates new prices for juomas
+func (db *Db) CreatePrices(juomat *[]exel.Juoma) (OK bool, error error) {
+	stmp, stmpErr := db.conn.Prepare("INSERT INTO Hinta (Date, ProductID, Hinta) VALUES ($1, $2, $3)")
+	if stmpErr != nil {
+		return false, stmpErr
+	}
+	defer stmp.Close()
+	for _, juoma := range *juomat {
+		_, err := stmp.Exec(juoma.Date, juoma.ProductID, juoma.Hinta)
+		if err != nil {
+			return false, err
+		}
+	}
+	return true, nil
 }

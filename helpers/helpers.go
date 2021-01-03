@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"log"
 	"strconv"
 	"strings"
 	"time"
@@ -27,4 +28,11 @@ func ParseTime(timeStr string) time.Time {
 	formatted := yyyy + "-" + mm + "-" + dd
 	myDate, _ := time.Parse("2006-01-02", formatted)
 	return myDate
+}
+
+//Duration prints the time of some func
+func Duration(invocation time.Time, name string) {
+	elapsed := time.Since(invocation)
+
+	log.Printf("%s lasted %s", name, elapsed)
 }

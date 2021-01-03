@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "oluet_api_dev",
+            "database": "oluet_api_dev",
+            "username": "dev",
+            "password": "dev"
+        }
+    ]
+}
