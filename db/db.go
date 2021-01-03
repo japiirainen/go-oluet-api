@@ -120,19 +120,18 @@ func (db *Db) insertJuomas(juomat *[]exel.Juoma) (OK bool, error error) {
 }
 
 // GetAllJuomas finds all the drinks
-func (db *Db) GetAllJuomas() ([]*model.Juoma, error) {
+func (db *Db) GetAllJuomas() ([]model.Juoma, error) {
 	rows, err := db.conn.Query("SELECT * FROM Juoma;")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	println(rows)
 
 	//test with fewer items?
-	var juomat []*model.Juoma
+	var juomat []model.Juoma
 	for rows.Next() {
-		var juoma *model.Juoma
-		err := rows.Scan(&juoma.ID, &juoma.Date, &juoma.ProductID, &juoma.Nimi, &juoma.Valikoima, &juoma.PulloKoko, &juoma.Hinta, &juoma.LitraHinta, juoma.Uutuus, &juoma.HinnastoJarjestysKoodi, &juoma.Tyyppi, &juoma.AlaTyyppi, &juoma.ErityisRyhma, &juoma.OlutTyyppi, &juoma.ValmistusMaa, &juoma.Alue, &juoma.VuosiKerta, &juoma.EtikettiMerkintoja, &juoma.Huomautus, &juoma.Rypaleet, &juoma.Luonnehdinta, &juoma.PakkausTyyppi, &juoma.SuljentaTyyppi, &juoma.AlkoholiProsentti, &juoma.HapotGl, &juoma.SokeriGl, &juoma.Kantavierrep, &juoma.Vari, &juoma.Katkerot, &juoma.Energia100ml, &juoma.Valikoima)
+		var juoma model.Juoma
+		err := rows.Scan(&juoma.ID, &juoma.Date, &juoma.ProductID, &juoma.Nimi, &juoma.Valikoima, &juoma.PulloKoko, &juoma.Hinta, &juoma.LitraHinta, &juoma.Uutuus, &juoma.HinnastoJarjestysKoodi, &juoma.Tyyppi, &juoma.AlaTyyppi, &juoma.ErityisRyhma, &juoma.OlutTyyppi, &juoma.ValmistusMaa, &juoma.Alue, &juoma.VuosiKerta, &juoma.EtikettiMerkintoja, &juoma.Huomautus, &juoma.Rypaleet, &juoma.Luonnehdinta, &juoma.PakkausTyyppi, &juoma.SuljentaTyyppi, &juoma.AlkoholiProsentti, &juoma.HapotGl, &juoma.SokeriGl, &juoma.Kantavierrep, &juoma.Vari, &juoma.Katkerot, &juoma.Energia100ml, &juoma.Valikoima)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -160,4 +159,26 @@ func (db *Db) CreatePrices(juomat *[]exel.Juoma) (OK bool, error error) {
 		}
 	}
 	return true, nil
+}
+
+//GetAllPrices gets all the prices
+func (db *Db) GetAllPrices() ([]model.Hinta, error) {
+	rows, err := db.conn.Query("SELECT * FROM Hinta;")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var hinnat []model.Hinta
+	for rows.Next() {
+		var hinta model.Hinta
+		scanErr := rows.Scan(&hinta.ID, &hinta.Date, &hinta.ProductID, &hinta.Hinta)
+		if scanErr != nil {
+			return nil, scanErr
+		}
+		hinnat = append(hinnat, hinta)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return hinnat, nil
 }

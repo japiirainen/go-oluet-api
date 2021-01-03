@@ -102,9 +102,9 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Juoma(ctx context.Context, id string) (*model.Juoma, error)
-	Juomat(ctx context.Context) ([]*model.Juoma, error)
+	Juomat(ctx context.Context) ([]model.Juoma, error)
 	Hinta(ctx context.Context, id string) (*model.Hinta, error)
-	Hinnat(ctx context.Context) ([]*model.Hinta, error)
+	Hinnat(ctx context.Context) ([]model.Hinta, error)
 }
 
 type executableSchema struct {
@@ -1886,9 +1886,9 @@ func (ec *executionContext) _Query_Juomat(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Juoma)
+	res := resTmp.([]model.Juoma)
 	fc.Result = res
-	return ec.marshalNJuoma2ᚕᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
+	return ec.marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_Hinta(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1963,9 +1963,9 @@ func (ec *executionContext) _Query_Hinnat(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Hinta)
+	res := resTmp.([]model.Hinta)
 	fc.Result = res
-	return ec.marshalNHinta2ᚕᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐHintaᚄ(ctx, field.Selections, res)
+	return ec.marshalNHinta2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐHintaᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3665,7 +3665,7 @@ func (ec *executionContext) marshalNHinta2githubᚗcomᚋjapiirainenᚋgoᚑolue
 	return ec._Hinta(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNHinta2ᚕᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐHintaᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Hinta) graphql.Marshaler {
+func (ec *executionContext) marshalNHinta2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐHintaᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Hinta) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3689,7 +3689,7 @@ func (ec *executionContext) marshalNHinta2ᚕᚖgithubᚗcomᚋjapiirainenᚋgo�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNHinta2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐHinta(ctx, sel, v[i])
+			ret[i] = ec.marshalNHinta2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐHinta(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3746,7 +3746,7 @@ func (ec *executionContext) marshalNJuoma2githubᚗcomᚋjapiirainenᚋgoᚑolue
 	return ec._Juoma(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNJuoma2ᚕᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuomaᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Juoma) graphql.Marshaler {
+func (ec *executionContext) marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuomaᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Juoma) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3770,7 +3770,7 @@ func (ec *executionContext) marshalNJuoma2ᚕᚖgithubᚗcomᚋjapiirainenᚋgo�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNJuoma2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuoma(ctx, sel, v[i])
+			ret[i] = ec.marshalNJuoma2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuoma(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)

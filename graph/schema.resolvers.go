@@ -7,7 +7,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/japiirainen/go-oluet-api/graph/generated"
 	"github.com/japiirainen/go-oluet-api/graph/model"
@@ -17,7 +16,6 @@ func (r *mutationResolver) NewJuomas(ctx context.Context) (string, error) {
 	res, err := r.DB.InsertManyJuomas()
 	if err != nil {
 		log.Fatal(err)
-		return "error", err
 	}
 	return res, nil
 }
@@ -26,7 +24,7 @@ func (r *queryResolver) Juoma(ctx context.Context, id string) (*model.Juoma, err
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Juomat(ctx context.Context) ([]*model.Juoma, error) {
+func (r *queryResolver) Juomat(ctx context.Context) ([]model.Juoma, error) {
 	res, err := r.DB.GetAllJuomas()
 	if err != nil {
 		log.Fatal(err)
@@ -38,16 +36,12 @@ func (r *queryResolver) Hinta(ctx context.Context, id string) (*model.Hinta, err
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Hinnat(ctx context.Context) ([]*model.Hinta, error) {
-	var hinnat []*model.Hinta
-	dummyHinta := model.Hinta{
-		ID:        1,
-		Date:      time.Now(),
-		ProductID: "1337",
-		Hinta:     10.5,
+func (r *queryResolver) Hinnat(ctx context.Context) ([]model.Hinta, error) {
+	res, err := r.DB.GetAllPrices()
+	if err != nil {
+		log.Fatal(err)
 	}
-	hinnat = append(hinnat, &dummyHinta)
-	return hinnat, nil
+	return res, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
