@@ -20,8 +20,12 @@ func (r *mutationResolver) NewJuomas(ctx context.Context) (string, error) {
 	return res, nil
 }
 
-func (r *queryResolver) Juoma(ctx context.Context, id string) (*model.Juoma, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Juoma(ctx context.Context, productID string) (*model.Juoma, error) {
+	res, err := r.DB.GetJuomaByProdID(productID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return &res, nil
 }
 
 func (r *queryResolver) Juomat(ctx context.Context) ([]model.Juoma, error) {

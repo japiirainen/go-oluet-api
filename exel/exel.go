@@ -23,7 +23,7 @@ const AlkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Si
 // Juoma is a type for one drink
 type Juoma struct {
 	Date                   time.Time
-	ProductID              string
+	ProductID              int
 	Nimi                   string
 	Valmistaja             string
 	PulloKoko              string
@@ -71,7 +71,7 @@ func ReadXlsx() ([]Juoma, error) {
 
 	for _, row := range rows[4:] {
 		temp := Juoma{Date: parsedDate,
-			ProductID:              row[0],
+			ProductID:              helpers.ToInt(row[0]),
 			Nimi:                   row[1],
 			Valmistaja:             row[2],
 			PulloKoko:              row[3],

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS Juoma(
     ID serial PRIMARY KEY,
     Date DATE NOT NULL,
-    ProductID VARCHAR (255) NOT NULL,
+    ProductID INTEGER NOT NULL,
     Nimi VARCHAR (255),
     Valmistaja VARCHAR (255),
     Pullokoko VARCHAR (255),

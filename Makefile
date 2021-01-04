@@ -10,10 +10,10 @@ gen:
 	- @echo "done generating! ✅"
 
 start:
-	- go run server.go
+	- go run --race server.go
 
 build:
-	- go build -o main .
+	- go build --race -o main .
 
 migrate-up:
 	- migrate -database postgres://dev:dev@localhost:5432/oluet_api_dev?sslmode=disable -path db/migrations/postgres up

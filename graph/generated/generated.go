@@ -92,7 +92,7 @@ type ComplexityRoot struct {
 	Query struct {
 		Hinnat func(childComplexity int) int
 		Hinta  func(childComplexity int, id string) int
-		Juoma  func(childComplexity int, id string) int
+		Juoma  func(childComplexity int, productID string) int
 		Juomat func(childComplexity int) int
 	}
 }
@@ -101,7 +101,7 @@ type MutationResolver interface {
 	NewJuomas(ctx context.Context) (string, error)
 }
 type QueryResolver interface {
-	Juoma(ctx context.Context, id string) (*model.Juoma, error)
+	Juoma(ctx context.Context, productID string) (*model.Juoma, error)
 	Juomat(ctx context.Context) ([]model.Juoma, error)
 	Hinta(ctx context.Context, id string) (*model.Hinta, error)
 	Hinnat(ctx context.Context) ([]model.Hinta, error)
@@ -283,7 +283,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Juoma.PakkausTyyppi(childComplexity), true
 
-	case "Juoma.productId":
+	case "Juoma.productID":
 		if e.complexity.Juoma.ProductID == nil {
 			break
 		}
@@ -403,7 +403,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Juoma(childComplexity, args["ID"].(string)), true
+		return e.complexity.Query.Juoma(childComplexity, args["ProductID"].(string)), true
 
 	case "Query.Juomat":
 		if e.complexity.Query.Juomat == nil {
@@ -497,7 +497,7 @@ scalar Any
 scalar Upload
 `, BuiltIn: false},
 	{Name: "graph/schema/schema.graphql", Input: `type Query {
-  Juoma(ID: ID!): Juoma!
+  Juoma(ProductID: ID!): Juoma!
   Juomat: [Juoma!]!
   Hinta(ID: ID!): Hinta!
   Hinnat: [Hinta!]!
@@ -510,7 +510,7 @@ type Mutation {
 type Juoma {
   id: ID!
   date: Time!
-  productId: String
+  productID: ID!
   nimi: String
   valmistaja: String
   pulloKoko: String
@@ -574,14 +574,14 @@ func (ec *executionContext) field_Query_Juoma_args(ctx context.Context, rawArgs 
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["ID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ID"))
+	if tmp, ok := rawArgs["ProductID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ProductID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["ID"] = arg0
+	args["ProductID"] = arg0
 	return args, nil
 }
 
@@ -848,7 +848,7 @@ func (ec *executionContext) _Juoma_date(ctx context.Context, field graphql.Colle
 	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_productId(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Juoma_productID(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -873,11 +873,14 @@ func (ec *executionContext) _Juoma_productId(ctx context.Context, field graphql.
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2string(ctx, field.Selections, res)
+	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Juoma_nimi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
@@ -1839,7 +1842,7 @@ func (ec *executionContext) _Query_Juoma(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Juoma(rctx, args["ID"].(string))
+		return ec.resolvers.Query().Juoma(rctx, args["ProductID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3197,8 +3200,11 @@ func (ec *executionContext) _Juoma(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "productId":
-			out.Values[i] = ec._Juoma_productId(ctx, field, obj)
+		case "productID":
+			out.Values[i] = ec._Juoma_productID(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "nimi":
 			out.Values[i] = ec._Juoma_nimi(ctx, field, obj)
 		case "valmistaja":

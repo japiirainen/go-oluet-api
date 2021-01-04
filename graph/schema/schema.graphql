@@ -1,5 +1,5 @@
 type Query {
-  Juoma(ID: ID!): Juoma!
+  Juoma(ProductID: ID!): Juoma!
   Juomat: [Juoma!]!
   Hinta(ID: ID!): Hinta!
   Hinnat: [Hinta!]!
@@ -12,7 +12,7 @@ type Mutation {
 type Juoma {
   id: ID!
   date: Time!
-  productId: String
+  productID: ID!
   nimi: String
   valmistaja: String
   pulloKoko: String
