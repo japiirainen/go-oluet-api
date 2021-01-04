@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -29,7 +30,7 @@ func (db *Db) InsertManyJuomas() (string, error) {
 
 func (db *Db) insertJuomas(juomat *[]exel.Juoma) (OK bool, error error) {
 	defer helpers.Duration(time.Now(), "insertJuomas")
-	stmt, prepErr := db.conn.Prepare("INSERT INTO Juoma (Date," +
+	stmt, prepErr := db.conn.Prepare("INSERT INTO juoma (Date," +
 		" ProductID," +
 		" Nimi," +
 		" Valmistaja," +
@@ -74,7 +75,7 @@ func (db *Db) insertJuomas(juomat *[]exel.Juoma) (OK bool, error error) {
 
 // GetAllJuomas finds all the drinks
 func (db *Db) GetAllJuomas() ([]model.Juoma, error) {
-	rows, err := db.conn.Query("SELECT * FROM Juoma;")
+	rows, err := db.conn.Query("SELECT * FROM juoma;")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -101,7 +102,6 @@ func (db *Db) GetAllJuomas() ([]model.Juoma, error) {
 func (db *Db) GetJuomaByProdID(ProductID string) (j model.Juoma, error error) {
 	rows, err := db.conn.Query("SELECT * FROM juoma WHERE productid = $1;", ProductID)
 	defer rows.Close()
-
 	if err != nil {
 		log.Fatalf("db: failed to get juoma: %v\n", err)
 	}
@@ -113,4 +113,24 @@ func (db *Db) GetJuomaByProdID(ProductID string) (j model.Juoma, error error) {
 		}
 	}
 	return juoma, nil
+}
+
+//SearchForJuoma gets one juoma if found using search term
+func (db *Db) SearchForJuoma(term string) (j []model.Juoma, error error) {
+	qstr := fmt.Sprintf("SELECT * FROM juoma WHERE nimi ILIKE '%%%s%%'", term)
+	rows, err := db.conn.Query(qstr)
+	defer rows.Close()
+	if err != nil {
+		log.Fatalf("db: failed to find juoma: %v\n", err)
+	}
+	var juomat []model.Juoma
+	for rows.Next() {
+		var juoma model.Juoma
+		scanErr := rows.Scan(&juoma.ID, &juoma.Date, &juoma.ProductID, &juoma.Nimi, &juoma.Valikoima, &juoma.PulloKoko, &juoma.Hinta, &juoma.LitraHinta, &juoma.Uutuus, &juoma.HinnastoJarjestysKoodi, &juoma.Tyyppi, &juoma.AlaTyyppi, &juoma.ErityisRyhma, &juoma.OlutTyyppi, &juoma.ValmistusMaa, &juoma.Alue, &juoma.VuosiKerta, &juoma.EtikettiMerkintoja, &juoma.Huomautus, &juoma.Rypaleet, &juoma.Luonnehdinta, &juoma.PakkausTyyppi, &juoma.SuljentaTyyppi, &juoma.AlkoholiProsentti, &juoma.HapotGl, &juoma.SokeriGl, &juoma.Kantavierrep, &juoma.Vari, &juoma.Katkerot, &juoma.Energia100ml, &juoma.Valikoima)
+		if scanErr != nil {
+			log.Fatalf("db: failed to scan juoma: %v\n", err)
+		}
+		juomat = append(juomat, juoma)
+	}
+	return juomat, nil
 }

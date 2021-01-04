@@ -90,10 +90,11 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Hinnat func(childComplexity int) int
-		Hinta  func(childComplexity int, id string) int
-		Juoma  func(childComplexity int, productID string) int
-		Juomat func(childComplexity int) int
+		Hinnat      func(childComplexity int) int
+		Hinta       func(childComplexity int, id string) int
+		Juoma       func(childComplexity int, productID string) int
+		JuomaSearch func(childComplexity int, term string) int
+		Juomat      func(childComplexity int) int
 	}
 }
 
@@ -102,6 +103,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Juoma(ctx context.Context, productID string) (*model.Juoma, error)
+	JuomaSearch(ctx context.Context, term string) ([]model.Juoma, error)
 	Juomat(ctx context.Context) ([]model.Juoma, error)
 	Hinta(ctx context.Context, id string) (*model.Hinta, error)
 	Hinnat(ctx context.Context) ([]model.Hinta, error)
@@ -374,38 +376,50 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.NewJuomas(childComplexity), true
 
-	case "Query.Hinnat":
+	case "Query.hinnat":
 		if e.complexity.Query.Hinnat == nil {
 			break
 		}
 
 		return e.complexity.Query.Hinnat(childComplexity), true
 
-	case "Query.Hinta":
+	case "Query.hinta":
 		if e.complexity.Query.Hinta == nil {
 			break
 		}
 
-		args, err := ec.field_Query_Hinta_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_hinta_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
 		return e.complexity.Query.Hinta(childComplexity, args["ID"].(string)), true
 
-	case "Query.Juoma":
+	case "Query.juoma":
 		if e.complexity.Query.Juoma == nil {
 			break
 		}
 
-		args, err := ec.field_Query_Juoma_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_juoma_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.Juoma(childComplexity, args["ProductID"].(string)), true
+		return e.complexity.Query.Juoma(childComplexity, args["productID"].(string)), true
 
-	case "Query.Juomat":
+	case "Query.juomaSearch":
+		if e.complexity.Query.JuomaSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_juomaSearch_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.JuomaSearch(childComplexity, args["term"].(string)), true
+
+	case "Query.juomat":
 		if e.complexity.Query.Juomat == nil {
 			break
 		}
@@ -497,10 +511,11 @@ scalar Any
 scalar Upload
 `, BuiltIn: false},
 	{Name: "graph/schema/schema.graphql", Input: `type Query {
-  Juoma(ProductID: ID!): Juoma!
-  Juomat: [Juoma!]!
-  Hinta(ID: ID!): Hinta!
-  Hinnat: [Hinta!]!
+  juoma(productID: ID!): Juoma!
+  juomaSearch(term: String!): [Juoma!]!
+  juomat: [Juoma!]!
+  hinta(ID: ID!): Hinta!
+  hinnat: [Hinta!]!
 }
 
 type Mutation {
@@ -555,7 +570,22 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Query_Hinta_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["name"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["name"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_hinta_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -570,33 +600,33 @@ func (ec *executionContext) field_Query_Hinta_args(ctx context.Context, rawArgs 
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_Juoma_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_juomaSearch_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["ProductID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ProductID"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["ProductID"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["name"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+	if tmp, ok := rawArgs["term"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("term"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["name"] = arg0
+	args["term"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_juoma_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["productID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productID"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productID"] = arg0
 	return args, nil
 }
 
@@ -1817,7 +1847,7 @@ func (ec *executionContext) _Mutation_newJuomas(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_Juoma(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_juoma(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1834,7 +1864,7 @@ func (ec *executionContext) _Query_Juoma(ctx context.Context, field graphql.Coll
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_Juoma_args(ctx, rawArgs)
+	args, err := ec.field_Query_juoma_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -1842,7 +1872,7 @@ func (ec *executionContext) _Query_Juoma(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Juoma(rctx, args["ProductID"].(string))
+		return ec.resolvers.Query().Juoma(rctx, args["productID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1859,7 +1889,49 @@ func (ec *executionContext) _Query_Juoma(ctx context.Context, field graphql.Coll
 	return ec.marshalNJuoma2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuoma(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_Juomat(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_juomaSearch(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_juomaSearch_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().JuomaSearch(rctx, args["term"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]model.Juoma)
+	fc.Result = res
+	return ec.marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_juomat(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1894,7 +1966,7 @@ func (ec *executionContext) _Query_Juomat(ctx context.Context, field graphql.Col
 	return ec.marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_Hinta(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_hinta(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1911,7 +1983,7 @@ func (ec *executionContext) _Query_Hinta(ctx context.Context, field graphql.Coll
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_Hinta_args(ctx, rawArgs)
+	args, err := ec.field_Query_hinta_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -1936,7 +2008,7 @@ func (ec *executionContext) _Query_Hinta(ctx context.Context, field graphql.Coll
 	return ec.marshalNHinta2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgraphᚋmodelᚐHinta(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_Hinnat(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_hinnat(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -3321,7 +3393,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "Juoma":
+		case "juoma":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3329,13 +3401,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_Juoma(ctx, field)
+				res = ec._Query_juoma(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "Juomat":
+		case "juomaSearch":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3343,13 +3415,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_Juomat(ctx, field)
+				res = ec._Query_juomaSearch(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "Hinta":
+		case "juomat":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3357,13 +3429,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_Hinta(ctx, field)
+				res = ec._Query_juomat(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "Hinnat":
+		case "hinta":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3371,7 +3443,21 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_Hinnat(ctx, field)
+				res = ec._Query_hinta(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
+		case "hinnat":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_hinnat(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}

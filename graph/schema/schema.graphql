@@ -1,8 +1,9 @@
 type Query {
-  Juoma(ProductID: ID!): Juoma!
-  Juomat: [Juoma!]!
-  Hinta(ID: ID!): Hinta!
-  Hinnat: [Hinta!]!
+  juoma(productID: ID!): Juoma!
+  juomaSearch(term: String!): [Juoma!]!
+  juomat: [Juoma!]!
+  hinta(ID: ID!): Hinta!
+  hinnat: [Hinta!]!
 }
 
 type Mutation {

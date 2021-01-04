@@ -28,6 +28,14 @@ func (r *queryResolver) Juoma(ctx context.Context, productID string) (*model.Juo
 	return &res, nil
 }
 
+func (r *queryResolver) JuomaSearch(ctx context.Context, term string) ([]model.Juoma, error) {
+	res, err := r.DB.SearchForJuoma(term)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return res, nil
+}
+
 func (r *queryResolver) Juomat(ctx context.Context) ([]model.Juoma, error) {
 	res, err := r.DB.GetAllJuomas()
 	if err != nil {
