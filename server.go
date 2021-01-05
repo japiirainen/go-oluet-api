@@ -8,8 +8,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/japiirainen/go-oluet-api/db"
-	"github.com/japiirainen/go-oluet-api/graph"
 	"github.com/japiirainen/go-oluet-api/graph/generated"
+	"github.com/japiirainen/go-oluet-api/graph/resolvers"
 )
 
 const defaultPort = "5000"
@@ -21,7 +21,7 @@ func main() {
 	}
 	c := db.Connect()
 	defer c.CloseConnection()
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{
 		DB: c,
 	}}))
 
