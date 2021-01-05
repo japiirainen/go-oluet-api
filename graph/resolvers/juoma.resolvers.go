@@ -7,7 +7,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (r *mutationResolver) NewJuomas(ctx context.Context) (string, error) {
+func (r *mutationResolver) Newjuomas(ctx context.Context) (string, error) {
 	log.Info("resolvers: NewJuoma")
 	res, err := r.DB.InsertManyJuomas()
 	if err != nil {
@@ -25,7 +25,7 @@ func (r *queryResolver) Juoma(ctx context.Context, productID string) (*model.Juo
 	return &res, nil
 }
 
-func (r *queryResolver) JuomaSearch(ctx context.Context, term string) ([]model.Juoma, error) {
+func (r *queryResolver) Juomasearch(ctx context.Context, term string) ([]model.Juoma, error) {
 	log.Info("resolvers: JuomaSearch")
 	res, err := r.DB.SearchForJuoma(term)
 	if err != nil {
@@ -52,7 +52,7 @@ func (r *queryResolver) Oluet(ctx context.Context) ([]model.Juoma, error) {
 	return res, nil
 }
 
-func (r *queryResolver) OlutSearch(ctx context.Context, term string) ([]model.Juoma, error) {
+func (r *queryResolver) Olutsearch(ctx context.Context, term string) ([]model.Juoma, error) {
 	log.Info("resolvers: OluetSearch")
 	res, err := r.DB.SearchForBeer(term)
 	if err != nil {

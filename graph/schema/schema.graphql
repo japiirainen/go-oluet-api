@@ -1,15 +1,39 @@
 type Query {
+  """
+  Returns one juoma when given a correct productID
+  """
   juoma(productID: ID!): Juoma!
-  juomaSearch(term: String!): [Juoma!]!
+  """
+  Text search that matches on fields 'nimi' and 'tyyppi'
+  Takes a search term as it's input
+  """
+  juomasearch(term: String!): [Juoma!]!
+  """
+  Returns all drinks
+  """
   juomat: [Juoma!]!
-  hinta(ID: ID!): Hinta!
+  """
+  Returns the fill price history of a specified product.
+  Takes productID as it's input
+  """
+  hintahistoria(productID: ID!): [Hinta!]!
+  """
+  Returns all prices from every product
+  """
   hinnat: [Hinta!]!
+  """
+  Returns all Beers
+  """
   oluet: [Juoma!]!
-  olutSearch(term: String!): [Juoma!]!
+  """
+  Text search that matches beers based on the field 'nimi'
+  Takes a search term as it's input
+  """
+  olutsearch(term: String!): [Juoma!]!
 }
 
 type Mutation {
-  newJuomas: String!
+  newjuomas: String!
 }
 
 type Juoma {
@@ -47,8 +71,20 @@ type Juoma {
 }
 
 type Hinta {
+  """
+  ID for internal use
+  """
   id: ID!
+  """
+  Creation date
+  """
   date: Time!
+  """
+  ID of the product
+  """
   productId: String!
+  """
+  Price of the product
+  """
   hinta: Float!
 }
