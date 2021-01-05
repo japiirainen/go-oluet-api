@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
 
@@ -10,11 +9,13 @@ import (
 	"github.com/japiirainen/go-oluet-api/db"
 	"github.com/japiirainen/go-oluet-api/graph/generated"
 	"github.com/japiirainen/go-oluet-api/graph/resolvers"
+	log "github.com/sirupsen/logrus"
 )
 
 const defaultPort = "5000"
 
 func main() {
+	log.SetFormatter(&log.TextFormatter{})
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
@@ -28,6 +29,6 @@ func main() {
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
+	log.Infof("connect to http://localhost:%s/ for GraphQL playground", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

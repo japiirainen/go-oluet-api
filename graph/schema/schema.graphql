@@ -4,6 +4,8 @@ type Query {
   juomat: [Juoma!]!
   hinta(ID: ID!): Hinta!
   hinnat: [Hinta!]!
+  oluet: [Juoma!]!
+  olutSearch(term: String!): [Juoma!]!
 }
 
 type Mutation {
