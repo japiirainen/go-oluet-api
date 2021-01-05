@@ -1,24 +1,24 @@
 schema:
-  - graph/schema/*.graphql
+  - gql/schema/*.graphql
 
 exec:
-  filename: graph/generated/generated.go
+  filename: gql/generated/generated.go
   package: generated
   
 model:
-  filename: graph/model/models_gen.go
+  filename: gql/model/models_gen.go
   package: model
 
 resolver:
-  layout: follow-schema
-  dir: graph/resolvers
+  filename: ./gql/resolvers/resolver.go
+  dir: gql/resolvers
   package: resolvers
   filename_template: "{name}.resolvers.go"
 
 
 
 autobind:
-  - "github.com/japiirainen/go-oluet-api/graph/model"
+  - "github.com/japiirainen/go-oluet-api/gql/model"
 
 models:
   ID:

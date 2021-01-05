@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/japiirainen/go-oluet-api/exel"
-	"github.com/japiirainen/go-oluet-api/graph/model"
+	"github.com/japiirainen/go-oluet-api/gql/model"
 	"github.com/japiirainen/go-oluet-api/helpers"
 	log "github.com/sirupsen/logrus"
 )

@@ -7,8 +7,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/japiirainen/go-oluet-api/db"
-	"github.com/japiirainen/go-oluet-api/graph/generated"
-	"github.com/japiirainen/go-oluet-api/graph/resolvers"
+	"github.com/japiirainen/go-oluet-api/gql/generated"
+	"github.com/japiirainen/go-oluet-api/gql/resolvers"
 	log "github.com/sirupsen/logrus"
 )
 

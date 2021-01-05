@@ -1,11 +1,16 @@
 package resolvers
 
-// This file will be automatically regenerated based on the schema, any resolver implementations
-// will be copied through when generating and any unknown code will be moved to the end.
+//go:generate go run github.com/99designs/gqlgen
 
 import (
-	"github.com/japiirainen/go-oluet-api/graph/generated"
+	"github.com/japiirainen/go-oluet-api/db"
+	"github.com/japiirainen/go-oluet-api/gql/generated"
 )
+
+//Resolver is the base resolver
+type Resolver struct {
+	DB *db.Db
+}
 
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }

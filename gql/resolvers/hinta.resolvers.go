@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/japiirainen/go-oluet-api/graph/model"
+	"github.com/japiirainen/go-oluet-api/gql/model"
 	log "github.com/sirupsen/logrus"
 )
 

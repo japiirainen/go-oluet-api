@@ -6,7 +6,7 @@ compose-dbs:
 
 gen:
 	- @echo "generating..."
-	- go generate -v ./graph/...
+	- go generate -v ./gql/...
 	- @echo "done generating! ✅"
 
 start:
