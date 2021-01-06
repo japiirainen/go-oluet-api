@@ -4,8 +4,8 @@ import (
 	"time"
 )
 
-//Hinta is the type of one hinta
-type Hinta struct {
+//Price is the type of one hinta
+type Price struct {
 	ID        int       `json:"id"`
 	Date      time.Time `json:"date"`
 	ProductID string    `json:"productId"`

@@ -1,0 +1,33 @@
+type Query {
+  """
+  Returns one juoma when given a correct productID
+  """
+  drink(productID: ID!): Drink!
+  """
+  Text search that matches on fields 'nimi' and 'tyyppi'
+  Takes a search term as it's input
+  """
+  drinksearch(term: String!): [Drink!]!
+  """
+  Returns all drinks
+  """
+  drinks: [Drink!]!
+  """
+  Returns the fill price history of a specified product.
+  Takes productID as it's input
+  """
+  pricehistory(productID: ID!): [Price!]!
+  """
+  Returns all prices from every product
+  """
+  prices: [Price!]!
+  """
+  Returns all Beers
+  """
+  beers: [Drink!]!
+  """
+  Text search that matches beers based on the field 'nimi'
+  Takes a search term as it's input
+  """
+  beersearch(term: String!): [Drink!]!
+}

@@ -1,0 +1,18 @@
+type Price {
+  """
+  ID for internal use
+  """
+  id: ID!
+  """
+  Creation date
+  """
+  date: Time!
+  """
+  ID of the product
+  """
+  productId: String!
+  """
+  Price of the product
+  """
+  hinta: Float!
+}

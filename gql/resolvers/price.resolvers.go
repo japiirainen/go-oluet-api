@@ -8,7 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (r *queryResolver) Hinnat(ctx context.Context) ([]model.Hinta, error) {
+func (r *queryResolver) Prices(ctx context.Context) ([]model.Price, error) {
+	log.Info("resolvers: Prices")
 	res, err := r.DB.GetAllPrices()
 	if err != nil {
 		log.Error("resolvers: %s", err)
@@ -16,6 +17,6 @@ func (r *queryResolver) Hinnat(ctx context.Context) ([]model.Hinta, error) {
 	return res, nil
 }
 
-func (r *queryResolver) Hintahistoria(ctx context.Context, productID string) ([]model.Hinta, error) {
+func (r *queryResolver) Pricehistory(ctx context.Context, productID string) ([]model.Price, error) {
 	panic(fmt.Errorf("not implemented"))
 }

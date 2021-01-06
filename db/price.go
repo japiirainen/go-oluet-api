@@ -6,14 +6,14 @@ import (
 )
 
 //CreatePrices creates new prices for juomas
-func (db *Db) CreatePrices(juomat *[]exel.Juoma) (OK bool, error error) {
-	stmp, stmpErr := db.conn.Prepare("INSERT INTO Hinta (Date, ProductID, Hinta) VALUES ($1, $2, $3)")
+func (db *Db) CreatePrices(drinks *[]exel.Drink) (OK bool, error error) {
+	stmp, stmpErr := db.conn.Prepare("INSERT INTO price (Date, ProductID, Hinta) VALUES ($1, $2, $3)")
 	if stmpErr != nil {
 		return false, stmpErr
 	}
 	defer stmp.Close()
-	for _, juoma := range *juomat {
-		_, err := stmp.Exec(juoma.Date, juoma.ProductID, juoma.Hinta)
+	for _, drink := range *drinks {
+		_, err := stmp.Exec(drink.Date, drink.ProductID, drink.Hinta)
 		if err != nil {
 			return false, err
 		}
@@ -22,23 +22,23 @@ func (db *Db) CreatePrices(juomat *[]exel.Juoma) (OK bool, error error) {
 }
 
 //GetAllPrices gets all the prices
-func (db *Db) GetAllPrices() ([]model.Hinta, error) {
-	rows, err := db.conn.Query("SELECT * FROM Hinta;")
+func (db *Db) GetAllPrices() ([]model.Price, error) {
+	rows, err := db.conn.Query("SELECT * FROM price;")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var hinnat []model.Hinta
+	var prices []model.Price
 	for rows.Next() {
-		var hinta model.Hinta
-		scanErr := rows.Scan(&hinta.ID, &hinta.Date, &hinta.ProductID, &hinta.Hinta)
+		var price model.Price
+		scanErr := rows.Scan(&price.ID, &price.Date, &price.ProductID, &price.Hinta)
 		if scanErr != nil {
 			return nil, scanErr
 		}
-		hinnat = append(hinnat, hinta)
+		prices = append(prices, price)
 	}
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	return hinnat, nil
+	return prices, nil
 }

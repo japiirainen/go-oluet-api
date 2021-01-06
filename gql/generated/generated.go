@@ -44,14 +44,7 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
-	Hinta struct {
-		Date      func(childComplexity int) int
-		Hinta     func(childComplexity int) int
-		ID        func(childComplexity int) int
-		ProductID func(childComplexity int) int
-	}
-
-	Juoma struct {
+	Drink struct {
 		AlaTyyppi              func(childComplexity int) int
 		AlkoholiProsentti      func(childComplexity int) int
 		Alue                   func(childComplexity int) int
@@ -86,31 +79,38 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		Newjuomas func(childComplexity int) int
+		Newdrinks func(childComplexity int) int
+	}
+
+	Price struct {
+		Date      func(childComplexity int) int
+		Hinta     func(childComplexity int) int
+		ID        func(childComplexity int) int
+		ProductID func(childComplexity int) int
 	}
 
 	Query struct {
-		Hinnat        func(childComplexity int) int
-		Hintahistoria func(childComplexity int, productID string) int
-		Juoma         func(childComplexity int, productID string) int
-		Juomasearch   func(childComplexity int, term string) int
-		Juomat        func(childComplexity int) int
-		Oluet         func(childComplexity int) int
-		Olutsearch    func(childComplexity int, term string) int
+		Beers        func(childComplexity int) int
+		Beersearch   func(childComplexity int, term string) int
+		Drink        func(childComplexity int, productID string) int
+		Drinks       func(childComplexity int) int
+		Drinksearch  func(childComplexity int, term string) int
+		Pricehistory func(childComplexity int, productID string) int
+		Prices       func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	Newjuomas(ctx context.Context) (string, error)
+	Newdrinks(ctx context.Context) (string, error)
 }
 type QueryResolver interface {
-	Juoma(ctx context.Context, productID string) (*model.Juoma, error)
-	Juomasearch(ctx context.Context, term string) ([]model.Juoma, error)
-	Juomat(ctx context.Context) ([]model.Juoma, error)
-	Hintahistoria(ctx context.Context, productID string) ([]model.Hinta, error)
-	Hinnat(ctx context.Context) ([]model.Hinta, error)
-	Oluet(ctx context.Context) ([]model.Juoma, error)
-	Olutsearch(ctx context.Context, term string) ([]model.Juoma, error)
+	Drink(ctx context.Context, productID string) (*model.Drink, error)
+	Drinksearch(ctx context.Context, term string) ([]model.Drink, error)
+	Drinks(ctx context.Context) ([]model.Drink, error)
+	Pricehistory(ctx context.Context, productID string) ([]model.Price, error)
+	Prices(ctx context.Context) ([]model.Price, error)
+	Beers(ctx context.Context) ([]model.Drink, error)
+	Beersearch(ctx context.Context, term string) ([]model.Drink, error)
 }
 
 type executableSchema struct {
@@ -128,326 +128,326 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "Hinta.date":
-		if e.complexity.Hinta.Date == nil {
+	case "Drink.alaTyyppi":
+		if e.complexity.Drink.AlaTyyppi == nil {
 			break
 		}
 
-		return e.complexity.Hinta.Date(childComplexity), true
+		return e.complexity.Drink.AlaTyyppi(childComplexity), true
 
-	case "Hinta.hinta":
-		if e.complexity.Hinta.Hinta == nil {
+	case "Drink.alkoholiProsentti":
+		if e.complexity.Drink.AlkoholiProsentti == nil {
 			break
 		}
 
-		return e.complexity.Hinta.Hinta(childComplexity), true
+		return e.complexity.Drink.AlkoholiProsentti(childComplexity), true
 
-	case "Hinta.id":
-		if e.complexity.Hinta.ID == nil {
+	case "Drink.alue":
+		if e.complexity.Drink.Alue == nil {
 			break
 		}
 
-		return e.complexity.Hinta.ID(childComplexity), true
+		return e.complexity.Drink.Alue(childComplexity), true
 
-	case "Hinta.productId":
-		if e.complexity.Hinta.ProductID == nil {
+	case "Drink.date":
+		if e.complexity.Drink.Date == nil {
 			break
 		}
 
-		return e.complexity.Hinta.ProductID(childComplexity), true
+		return e.complexity.Drink.Date(childComplexity), true
 
-	case "Juoma.alaTyyppi":
-		if e.complexity.Juoma.AlaTyyppi == nil {
+	case "Drink.energia100ML":
+		if e.complexity.Drink.Energia100ml == nil {
 			break
 		}
 
-		return e.complexity.Juoma.AlaTyyppi(childComplexity), true
+		return e.complexity.Drink.Energia100ml(childComplexity), true
 
-	case "Juoma.alkoholiProsentti":
-		if e.complexity.Juoma.AlkoholiProsentti == nil {
+	case "Drink.erityisRyhma":
+		if e.complexity.Drink.ErityisRyhma == nil {
 			break
 		}
 
-		return e.complexity.Juoma.AlkoholiProsentti(childComplexity), true
+		return e.complexity.Drink.ErityisRyhma(childComplexity), true
 
-	case "Juoma.alue":
-		if e.complexity.Juoma.Alue == nil {
+	case "Drink.etikettiMerkintoja":
+		if e.complexity.Drink.EtikettiMerkintoja == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Alue(childComplexity), true
+		return e.complexity.Drink.EtikettiMerkintoja(childComplexity), true
 
-	case "Juoma.date":
-		if e.complexity.Juoma.Date == nil {
+	case "Drink.hapotGL":
+		if e.complexity.Drink.HapotGl == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Date(childComplexity), true
+		return e.complexity.Drink.HapotGl(childComplexity), true
 
-	case "Juoma.energia100ML":
-		if e.complexity.Juoma.Energia100ml == nil {
+	case "Drink.hinnastoJarjestysKoodi":
+		if e.complexity.Drink.HinnastoJarjestysKoodi == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Energia100ml(childComplexity), true
+		return e.complexity.Drink.HinnastoJarjestysKoodi(childComplexity), true
 
-	case "Juoma.erityisRyhma":
-		if e.complexity.Juoma.ErityisRyhma == nil {
+	case "Drink.hinta":
+		if e.complexity.Drink.Hinta == nil {
 			break
 		}
 
-		return e.complexity.Juoma.ErityisRyhma(childComplexity), true
+		return e.complexity.Drink.Hinta(childComplexity), true
 
-	case "Juoma.etikettiMerkintoja":
-		if e.complexity.Juoma.EtikettiMerkintoja == nil {
+	case "Drink.huomautus":
+		if e.complexity.Drink.Huomautus == nil {
 			break
 		}
 
-		return e.complexity.Juoma.EtikettiMerkintoja(childComplexity), true
+		return e.complexity.Drink.Huomautus(childComplexity), true
 
-	case "Juoma.hapotGL":
-		if e.complexity.Juoma.HapotGl == nil {
+	case "Drink.id":
+		if e.complexity.Drink.ID == nil {
 			break
 		}
 
-		return e.complexity.Juoma.HapotGl(childComplexity), true
+		return e.complexity.Drink.ID(childComplexity), true
 
-	case "Juoma.hinnastoJarjestysKoodi":
-		if e.complexity.Juoma.HinnastoJarjestysKoodi == nil {
+	case "Drink.kantavierrep":
+		if e.complexity.Drink.Kantavierrep == nil {
 			break
 		}
 
-		return e.complexity.Juoma.HinnastoJarjestysKoodi(childComplexity), true
+		return e.complexity.Drink.Kantavierrep(childComplexity), true
 
-	case "Juoma.hinta":
-		if e.complexity.Juoma.Hinta == nil {
+	case "Drink.katkerot":
+		if e.complexity.Drink.Katkerot == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Hinta(childComplexity), true
+		return e.complexity.Drink.Katkerot(childComplexity), true
 
-	case "Juoma.huomautus":
-		if e.complexity.Juoma.Huomautus == nil {
+	case "Drink.litraHinta":
+		if e.complexity.Drink.LitraHinta == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Huomautus(childComplexity), true
+		return e.complexity.Drink.LitraHinta(childComplexity), true
 
-	case "Juoma.id":
-		if e.complexity.Juoma.ID == nil {
+	case "Drink.luonnehdinta":
+		if e.complexity.Drink.Luonnehdinta == nil {
 			break
 		}
 
-		return e.complexity.Juoma.ID(childComplexity), true
+		return e.complexity.Drink.Luonnehdinta(childComplexity), true
 
-	case "Juoma.kantavierrep":
-		if e.complexity.Juoma.Kantavierrep == nil {
+	case "Drink.nimi":
+		if e.complexity.Drink.Nimi == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Kantavierrep(childComplexity), true
+		return e.complexity.Drink.Nimi(childComplexity), true
 
-	case "Juoma.katkerot":
-		if e.complexity.Juoma.Katkerot == nil {
+	case "Drink.olutTyyppi":
+		if e.complexity.Drink.OlutTyyppi == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Katkerot(childComplexity), true
+		return e.complexity.Drink.OlutTyyppi(childComplexity), true
 
-	case "Juoma.litraHinta":
-		if e.complexity.Juoma.LitraHinta == nil {
+	case "Drink.pakkausTyyppi":
+		if e.complexity.Drink.PakkausTyyppi == nil {
 			break
 		}
 
-		return e.complexity.Juoma.LitraHinta(childComplexity), true
+		return e.complexity.Drink.PakkausTyyppi(childComplexity), true
 
-	case "Juoma.luonnehdinta":
-		if e.complexity.Juoma.Luonnehdinta == nil {
+	case "Drink.productID":
+		if e.complexity.Drink.ProductID == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Luonnehdinta(childComplexity), true
+		return e.complexity.Drink.ProductID(childComplexity), true
 
-	case "Juoma.nimi":
-		if e.complexity.Juoma.Nimi == nil {
+	case "Drink.pulloKoko":
+		if e.complexity.Drink.PulloKoko == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Nimi(childComplexity), true
+		return e.complexity.Drink.PulloKoko(childComplexity), true
 
-	case "Juoma.olutTyyppi":
-		if e.complexity.Juoma.OlutTyyppi == nil {
+	case "Drink.rypaleet":
+		if e.complexity.Drink.Rypaleet == nil {
 			break
 		}
 
-		return e.complexity.Juoma.OlutTyyppi(childComplexity), true
+		return e.complexity.Drink.Rypaleet(childComplexity), true
 
-	case "Juoma.pakkausTyyppi":
-		if e.complexity.Juoma.PakkausTyyppi == nil {
+	case "Drink.sokeriGL":
+		if e.complexity.Drink.SokeriGl == nil {
 			break
 		}
 
-		return e.complexity.Juoma.PakkausTyyppi(childComplexity), true
+		return e.complexity.Drink.SokeriGl(childComplexity), true
 
-	case "Juoma.productID":
-		if e.complexity.Juoma.ProductID == nil {
+	case "Drink.suljentaTyyppi":
+		if e.complexity.Drink.SuljentaTyyppi == nil {
 			break
 		}
 
-		return e.complexity.Juoma.ProductID(childComplexity), true
+		return e.complexity.Drink.SuljentaTyyppi(childComplexity), true
 
-	case "Juoma.pulloKoko":
-		if e.complexity.Juoma.PulloKoko == nil {
+	case "Drink.tyyppi":
+		if e.complexity.Drink.Tyyppi == nil {
 			break
 		}
 
-		return e.complexity.Juoma.PulloKoko(childComplexity), true
+		return e.complexity.Drink.Tyyppi(childComplexity), true
 
-	case "Juoma.rypaleet":
-		if e.complexity.Juoma.Rypaleet == nil {
+	case "Drink.uutuus":
+		if e.complexity.Drink.Uutuus == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Rypaleet(childComplexity), true
+		return e.complexity.Drink.Uutuus(childComplexity), true
 
-	case "Juoma.sokeriGL":
-		if e.complexity.Juoma.SokeriGl == nil {
+	case "Drink.valikoima":
+		if e.complexity.Drink.Valikoima == nil {
 			break
 		}
 
-		return e.complexity.Juoma.SokeriGl(childComplexity), true
+		return e.complexity.Drink.Valikoima(childComplexity), true
 
-	case "Juoma.suljentaTyyppi":
-		if e.complexity.Juoma.SuljentaTyyppi == nil {
+	case "Drink.valmistaja":
+		if e.complexity.Drink.Valmistaja == nil {
 			break
 		}
 
-		return e.complexity.Juoma.SuljentaTyyppi(childComplexity), true
+		return e.complexity.Drink.Valmistaja(childComplexity), true
 
-	case "Juoma.tyyppi":
-		if e.complexity.Juoma.Tyyppi == nil {
+	case "Drink.valmistusMaa":
+		if e.complexity.Drink.ValmistusMaa == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Tyyppi(childComplexity), true
+		return e.complexity.Drink.ValmistusMaa(childComplexity), true
 
-	case "Juoma.uutuus":
-		if e.complexity.Juoma.Uutuus == nil {
+	case "Drink.vari":
+		if e.complexity.Drink.Vari == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Uutuus(childComplexity), true
+		return e.complexity.Drink.Vari(childComplexity), true
 
-	case "Juoma.valikoima":
-		if e.complexity.Juoma.Valikoima == nil {
+	case "Drink.vuosiKerta":
+		if e.complexity.Drink.VuosiKerta == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Valikoima(childComplexity), true
+		return e.complexity.Drink.VuosiKerta(childComplexity), true
 
-	case "Juoma.valmistaja":
-		if e.complexity.Juoma.Valmistaja == nil {
+	case "Mutation.newdrinks":
+		if e.complexity.Mutation.Newdrinks == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Valmistaja(childComplexity), true
+		return e.complexity.Mutation.Newdrinks(childComplexity), true
 
-	case "Juoma.valmistusMaa":
-		if e.complexity.Juoma.ValmistusMaa == nil {
+	case "Price.date":
+		if e.complexity.Price.Date == nil {
 			break
 		}
 
-		return e.complexity.Juoma.ValmistusMaa(childComplexity), true
+		return e.complexity.Price.Date(childComplexity), true
 
-	case "Juoma.vari":
-		if e.complexity.Juoma.Vari == nil {
+	case "Price.hinta":
+		if e.complexity.Price.Hinta == nil {
 			break
 		}
 
-		return e.complexity.Juoma.Vari(childComplexity), true
+		return e.complexity.Price.Hinta(childComplexity), true
 
-	case "Juoma.vuosiKerta":
-		if e.complexity.Juoma.VuosiKerta == nil {
+	case "Price.id":
+		if e.complexity.Price.ID == nil {
 			break
 		}
 
-		return e.complexity.Juoma.VuosiKerta(childComplexity), true
+		return e.complexity.Price.ID(childComplexity), true
 
-	case "Mutation.newjuomas":
-		if e.complexity.Mutation.Newjuomas == nil {
+	case "Price.productId":
+		if e.complexity.Price.ProductID == nil {
 			break
 		}
 
-		return e.complexity.Mutation.Newjuomas(childComplexity), true
+		return e.complexity.Price.ProductID(childComplexity), true
 
-	case "Query.hinnat":
-		if e.complexity.Query.Hinnat == nil {
+	case "Query.beers":
+		if e.complexity.Query.Beers == nil {
 			break
 		}
 
-		return e.complexity.Query.Hinnat(childComplexity), true
+		return e.complexity.Query.Beers(childComplexity), true
 
-	case "Query.hintahistoria":
-		if e.complexity.Query.Hintahistoria == nil {
+	case "Query.beersearch":
+		if e.complexity.Query.Beersearch == nil {
 			break
 		}
 
-		args, err := ec.field_Query_hintahistoria_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_beersearch_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.Hintahistoria(childComplexity, args["productID"].(string)), true
+		return e.complexity.Query.Beersearch(childComplexity, args["term"].(string)), true
 
-	case "Query.juoma":
-		if e.complexity.Query.Juoma == nil {
+	case "Query.drink":
+		if e.complexity.Query.Drink == nil {
 			break
 		}
 
-		args, err := ec.field_Query_juoma_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_drink_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.Juoma(childComplexity, args["productID"].(string)), true
+		return e.complexity.Query.Drink(childComplexity, args["productID"].(string)), true
 
-	case "Query.juomasearch":
-		if e.complexity.Query.Juomasearch == nil {
+	case "Query.drinks":
+		if e.complexity.Query.Drinks == nil {
 			break
 		}
 
-		args, err := ec.field_Query_juomasearch_args(context.TODO(), rawArgs)
+		return e.complexity.Query.Drinks(childComplexity), true
+
+	case "Query.drinksearch":
+		if e.complexity.Query.Drinksearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_drinksearch_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.Juomasearch(childComplexity, args["term"].(string)), true
+		return e.complexity.Query.Drinksearch(childComplexity, args["term"].(string)), true
 
-	case "Query.juomat":
-		if e.complexity.Query.Juomat == nil {
+	case "Query.pricehistory":
+		if e.complexity.Query.Pricehistory == nil {
 			break
 		}
 
-		return e.complexity.Query.Juomat(childComplexity), true
-
-	case "Query.oluet":
-		if e.complexity.Query.Oluet == nil {
-			break
-		}
-
-		return e.complexity.Query.Oluet(childComplexity), true
-
-	case "Query.olutsearch":
-		if e.complexity.Query.Olutsearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_olutsearch_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_pricehistory_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.Olutsearch(childComplexity, args["term"].(string)), true
+		return e.complexity.Query.Pricehistory(childComplexity, args["productID"].(string)), true
+
+	case "Query.prices":
+		if e.complexity.Query.Prices == nil {
+			break
+		}
+
+		return e.complexity.Query.Prices(childComplexity), true
 
 	}
 	return 0, false
@@ -513,6 +513,44 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
+	{Name: "gql/schema/mutation.graphql", Input: `type Mutation {
+  newdrinks: String!
+}
+`, BuiltIn: false},
+	{Name: "gql/schema/query.graphql", Input: `type Query {
+  """
+  Returns one juoma when given a correct productID
+  """
+  drink(productID: ID!): Drink!
+  """
+  Text search that matches on fields 'nimi' and 'tyyppi'
+  Takes a search term as it's input
+  """
+  drinksearch(term: String!): [Drink!]!
+  """
+  Returns all drinks
+  """
+  drinks: [Drink!]!
+  """
+  Returns the fill price history of a specified product.
+  Takes productID as it's input
+  """
+  pricehistory(productID: ID!): [Price!]!
+  """
+  Returns all prices from every product
+  """
+  prices: [Price!]!
+  """
+  Returns all Beers
+  """
+  beers: [Drink!]!
+  """
+  Text search that matches beers based on the field 'nimi'
+  Takes a search term as it's input
+  """
+  beersearch(term: String!): [Drink!]!
+}
+`, BuiltIn: false},
 	{Name: "gql/schema/scalars.graphql", Input: `# gqlgen supports some custom scalars out of the box
 # see: https://github.com/99designs/gqlgen/blob/master/docs/content/reference/scalars.md
 
@@ -533,45 +571,12 @@ scalar Any
 # }
 scalar Upload
 `, BuiltIn: false},
-	{Name: "gql/schema/schema.graphql", Input: `type Query {
-  """
-  Returns one juoma when given a correct productID
-  """
-  juoma(productID: ID!): Juoma!
-  """
-  Text search that matches on fields 'nimi' and 'tyyppi'
-  Takes a search term as it's input
-  """
-  juomasearch(term: String!): [Juoma!]!
-  """
-  Returns all drinks
-  """
-  juomat: [Juoma!]!
-  """
-  Returns the fill price history of a specified product.
-  Takes productID as it's input
-  """
-  hintahistoria(productID: ID!): [Hinta!]!
-  """
-  Returns all prices from every product
-  """
-  hinnat: [Hinta!]!
-  """
-  Returns all Beers
-  """
-  oluet: [Juoma!]!
-  """
-  Text search that matches beers based on the field 'nimi'
-  Takes a search term as it's input
-  """
-  olutsearch(term: String!): [Juoma!]!
+	{Name: "gql/schema/schema.graphql", Input: `schema {
+  query: Query
+  mutation: Mutation
 }
-
-type Mutation {
-  newjuomas: String!
-}
-
-type Juoma {
+`, BuiltIn: false},
+	{Name: "gql/schema/types/drink.graphql", Input: `type Drink {
   id: ID!
   date: Time!
   productID: ID!
@@ -604,8 +609,8 @@ type Juoma {
   energia100ML: String
   valikoima: String
 }
-
-type Hinta {
+`, BuiltIn: false},
+	{Name: "gql/schema/types/price.graphql", Input: `type Price {
   """
   ID for internal use
   """
@@ -646,37 +651,7 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_hintahistoria_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["productID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productID"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["productID"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_juoma_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["productID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productID"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["productID"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_juomasearch_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_beersearch_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -691,7 +666,22 @@ func (ec *executionContext) field_Query_juomasearch_args(ctx context.Context, ra
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_olutsearch_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_drink_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["productID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productID"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productID"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_drinksearch_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -703,6 +693,21 @@ func (ec *executionContext) field_Query_olutsearch_args(ctx context.Context, raw
 		}
 	}
 	args["term"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_pricehistory_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["productID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("productID"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["productID"] = arg0
 	return args, nil
 }
 
@@ -744,7 +749,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Hinta_id(ctx context.Context, field graphql.CollectedField, obj *model.Hinta) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_id(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -752,7 +757,7 @@ func (ec *executionContext) _Hinta_id(ctx context.Context, field graphql.Collect
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Hinta",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -779,7 +784,7 @@ func (ec *executionContext) _Hinta_id(ctx context.Context, field graphql.Collect
 	return ec.marshalNID2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Hinta_date(ctx context.Context, field graphql.CollectedField, obj *model.Hinta) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_date(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -787,7 +792,7 @@ func (ec *executionContext) _Hinta_date(ctx context.Context, field graphql.Colle
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Hinta",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -814,7 +819,7 @@ func (ec *executionContext) _Hinta_date(ctx context.Context, field graphql.Colle
 	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Hinta_productId(ctx context.Context, field graphql.CollectedField, obj *model.Hinta) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_productID(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -822,147 +827,7 @@ func (ec *executionContext) _Hinta_productId(ctx context.Context, field graphql.
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Hinta",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ProductID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Hinta_hinta(ctx context.Context, field graphql.CollectedField, obj *model.Hinta) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Hinta",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Hinta, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(float64)
-	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Juoma_id(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Juoma",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNID2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Juoma_date(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Juoma",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Date, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(time.Time)
-	fc.Result = res
-	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Juoma_productID(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -989,7 +854,7 @@ func (ec *executionContext) _Juoma_productID(ctx context.Context, field graphql.
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_nimi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_nimi(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -997,7 +862,7 @@ func (ec *executionContext) _Juoma_nimi(ctx context.Context, field graphql.Colle
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1021,7 +886,7 @@ func (ec *executionContext) _Juoma_nimi(ctx context.Context, field graphql.Colle
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_valmistaja(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_valmistaja(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1029,7 +894,7 @@ func (ec *executionContext) _Juoma_valmistaja(ctx context.Context, field graphql
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1053,7 +918,7 @@ func (ec *executionContext) _Juoma_valmistaja(ctx context.Context, field graphql
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_pulloKoko(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_pulloKoko(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1061,7 +926,7 @@ func (ec *executionContext) _Juoma_pulloKoko(ctx context.Context, field graphql.
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1085,7 +950,7 @@ func (ec *executionContext) _Juoma_pulloKoko(ctx context.Context, field graphql.
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_hinta(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_hinta(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1093,7 +958,7 @@ func (ec *executionContext) _Juoma_hinta(ctx context.Context, field graphql.Coll
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1120,7 +985,7 @@ func (ec *executionContext) _Juoma_hinta(ctx context.Context, field graphql.Coll
 	return ec.marshalNFloat2float64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_litraHinta(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_litraHinta(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1128,7 +993,7 @@ func (ec *executionContext) _Juoma_litraHinta(ctx context.Context, field graphql
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1152,7 +1017,7 @@ func (ec *executionContext) _Juoma_litraHinta(ctx context.Context, field graphql
 	return ec.marshalOFloat2float64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_uutuus(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_uutuus(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1160,7 +1025,7 @@ func (ec *executionContext) _Juoma_uutuus(ctx context.Context, field graphql.Col
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1184,7 +1049,7 @@ func (ec *executionContext) _Juoma_uutuus(ctx context.Context, field graphql.Col
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_hinnastoJarjestysKoodi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_hinnastoJarjestysKoodi(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1192,7 +1057,7 @@ func (ec *executionContext) _Juoma_hinnastoJarjestysKoodi(ctx context.Context, f
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1216,7 +1081,7 @@ func (ec *executionContext) _Juoma_hinnastoJarjestysKoodi(ctx context.Context, f
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_tyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_tyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1224,7 +1089,7 @@ func (ec *executionContext) _Juoma_tyyppi(ctx context.Context, field graphql.Col
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1248,7 +1113,7 @@ func (ec *executionContext) _Juoma_tyyppi(ctx context.Context, field graphql.Col
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_alaTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_alaTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1256,7 +1121,7 @@ func (ec *executionContext) _Juoma_alaTyyppi(ctx context.Context, field graphql.
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1280,7 +1145,7 @@ func (ec *executionContext) _Juoma_alaTyyppi(ctx context.Context, field graphql.
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_erityisRyhma(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_erityisRyhma(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1288,7 +1153,7 @@ func (ec *executionContext) _Juoma_erityisRyhma(ctx context.Context, field graph
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1312,7 +1177,7 @@ func (ec *executionContext) _Juoma_erityisRyhma(ctx context.Context, field graph
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_olutTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_olutTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1320,7 +1185,7 @@ func (ec *executionContext) _Juoma_olutTyyppi(ctx context.Context, field graphql
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1344,7 +1209,7 @@ func (ec *executionContext) _Juoma_olutTyyppi(ctx context.Context, field graphql
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_valmistusMaa(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_valmistusMaa(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1352,7 +1217,7 @@ func (ec *executionContext) _Juoma_valmistusMaa(ctx context.Context, field graph
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1376,7 +1241,7 @@ func (ec *executionContext) _Juoma_valmistusMaa(ctx context.Context, field graph
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_alue(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_alue(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1384,7 +1249,7 @@ func (ec *executionContext) _Juoma_alue(ctx context.Context, field graphql.Colle
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1408,7 +1273,7 @@ func (ec *executionContext) _Juoma_alue(ctx context.Context, field graphql.Colle
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_vuosiKerta(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_vuosiKerta(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1416,7 +1281,7 @@ func (ec *executionContext) _Juoma_vuosiKerta(ctx context.Context, field graphql
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1440,7 +1305,7 @@ func (ec *executionContext) _Juoma_vuosiKerta(ctx context.Context, field graphql
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_etikettiMerkintoja(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_etikettiMerkintoja(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1448,7 +1313,7 @@ func (ec *executionContext) _Juoma_etikettiMerkintoja(ctx context.Context, field
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1472,7 +1337,7 @@ func (ec *executionContext) _Juoma_etikettiMerkintoja(ctx context.Context, field
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_huomautus(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_huomautus(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1480,7 +1345,7 @@ func (ec *executionContext) _Juoma_huomautus(ctx context.Context, field graphql.
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1504,7 +1369,7 @@ func (ec *executionContext) _Juoma_huomautus(ctx context.Context, field graphql.
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_rypaleet(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_rypaleet(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1512,7 +1377,7 @@ func (ec *executionContext) _Juoma_rypaleet(ctx context.Context, field graphql.C
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1536,7 +1401,7 @@ func (ec *executionContext) _Juoma_rypaleet(ctx context.Context, field graphql.C
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_luonnehdinta(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_luonnehdinta(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1544,7 +1409,7 @@ func (ec *executionContext) _Juoma_luonnehdinta(ctx context.Context, field graph
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1568,7 +1433,7 @@ func (ec *executionContext) _Juoma_luonnehdinta(ctx context.Context, field graph
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_pakkausTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_pakkausTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1576,7 +1441,7 @@ func (ec *executionContext) _Juoma_pakkausTyyppi(ctx context.Context, field grap
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1600,7 +1465,7 @@ func (ec *executionContext) _Juoma_pakkausTyyppi(ctx context.Context, field grap
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_suljentaTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_suljentaTyyppi(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1608,7 +1473,7 @@ func (ec *executionContext) _Juoma_suljentaTyyppi(ctx context.Context, field gra
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1632,7 +1497,7 @@ func (ec *executionContext) _Juoma_suljentaTyyppi(ctx context.Context, field gra
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_alkoholiProsentti(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_alkoholiProsentti(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1640,7 +1505,7 @@ func (ec *executionContext) _Juoma_alkoholiProsentti(ctx context.Context, field 
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1664,7 +1529,7 @@ func (ec *executionContext) _Juoma_alkoholiProsentti(ctx context.Context, field 
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_hapotGL(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_hapotGL(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1672,7 +1537,7 @@ func (ec *executionContext) _Juoma_hapotGL(ctx context.Context, field graphql.Co
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1696,7 +1561,7 @@ func (ec *executionContext) _Juoma_hapotGL(ctx context.Context, field graphql.Co
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_sokeriGL(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_sokeriGL(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1704,7 +1569,7 @@ func (ec *executionContext) _Juoma_sokeriGL(ctx context.Context, field graphql.C
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1728,7 +1593,7 @@ func (ec *executionContext) _Juoma_sokeriGL(ctx context.Context, field graphql.C
 	return ec.marshalOInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_kantavierrep(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_kantavierrep(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1736,7 +1601,7 @@ func (ec *executionContext) _Juoma_kantavierrep(ctx context.Context, field graph
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1760,7 +1625,7 @@ func (ec *executionContext) _Juoma_kantavierrep(ctx context.Context, field graph
 	return ec.marshalOFloat2float64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_vari(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_vari(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1768,7 +1633,7 @@ func (ec *executionContext) _Juoma_vari(ctx context.Context, field graphql.Colle
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1792,7 +1657,7 @@ func (ec *executionContext) _Juoma_vari(ctx context.Context, field graphql.Colle
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_katkerot(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_katkerot(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1800,7 +1665,7 @@ func (ec *executionContext) _Juoma_katkerot(ctx context.Context, field graphql.C
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1824,7 +1689,7 @@ func (ec *executionContext) _Juoma_katkerot(ctx context.Context, field graphql.C
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_energia100ML(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_energia100ML(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1832,7 +1697,7 @@ func (ec *executionContext) _Juoma_energia100ML(ctx context.Context, field graph
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1856,7 +1721,7 @@ func (ec *executionContext) _Juoma_energia100ML(ctx context.Context, field graph
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Juoma_valikoima(ctx context.Context, field graphql.CollectedField, obj *model.Juoma) (ret graphql.Marshaler) {
+func (ec *executionContext) _Drink_valikoima(ctx context.Context, field graphql.CollectedField, obj *model.Drink) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1864,7 +1729,7 @@ func (ec *executionContext) _Juoma_valikoima(ctx context.Context, field graphql.
 		}
 	}()
 	fc := &graphql.FieldContext{
-		Object:     "Juoma",
+		Object:     "Drink",
 		Field:      field,
 		Args:       nil,
 		IsMethod:   false,
@@ -1888,7 +1753,7 @@ func (ec *executionContext) _Juoma_valikoima(ctx context.Context, field graphql.
 	return ec.marshalOString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_newjuomas(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_newdrinks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1906,7 +1771,7 @@ func (ec *executionContext) _Mutation_newjuomas(ctx context.Context, field graph
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().Newjuomas(rctx)
+		return ec.resolvers.Mutation().Newdrinks(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1923,7 +1788,147 @@ func (ec *executionContext) _Mutation_newjuomas(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_juoma(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Price_id(ctx context.Context, field graphql.CollectedField, obj *model.Price) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Price",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNID2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Price_date(ctx context.Context, field graphql.CollectedField, obj *model.Price) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Price",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Date, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Price_productId(ctx context.Context, field graphql.CollectedField, obj *model.Price) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Price",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ProductID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Price_hinta(ctx context.Context, field graphql.CollectedField, obj *model.Price) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Price",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Hinta, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_drink(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1940,7 +1945,7 @@ func (ec *executionContext) _Query_juoma(ctx context.Context, field graphql.Coll
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_juoma_args(ctx, rawArgs)
+	args, err := ec.field_Query_drink_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -1948,7 +1953,7 @@ func (ec *executionContext) _Query_juoma(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Juoma(rctx, args["productID"].(string))
+		return ec.resolvers.Query().Drink(rctx, args["productID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1960,12 +1965,12 @@ func (ec *executionContext) _Query_juoma(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Juoma)
+	res := resTmp.(*model.Drink)
 	fc.Result = res
-	return ec.marshalNJuoma2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuoma(ctx, field.Selections, res)
+	return ec.marshalNDrink2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrink(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_juomasearch(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_drinksearch(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1982,7 +1987,7 @@ func (ec *executionContext) _Query_juomasearch(ctx context.Context, field graphq
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_juomasearch_args(ctx, rawArgs)
+	args, err := ec.field_Query_drinksearch_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -1990,7 +1995,7 @@ func (ec *executionContext) _Query_juomasearch(ctx context.Context, field graphq
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Juomasearch(rctx, args["term"].(string))
+		return ec.resolvers.Query().Drinksearch(rctx, args["term"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2002,12 +2007,12 @@ func (ec *executionContext) _Query_juomasearch(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.Juoma)
+	res := resTmp.([]model.Drink)
 	fc.Result = res
-	return ec.marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
+	return ec.marshalNDrink2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrinkᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_juomat(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_drinks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2025,7 +2030,7 @@ func (ec *executionContext) _Query_juomat(ctx context.Context, field graphql.Col
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Juomat(rctx)
+		return ec.resolvers.Query().Drinks(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2037,12 +2042,12 @@ func (ec *executionContext) _Query_juomat(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.Juoma)
+	res := resTmp.([]model.Drink)
 	fc.Result = res
-	return ec.marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
+	return ec.marshalNDrink2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrinkᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_hintahistoria(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_pricehistory(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2059,7 +2064,7 @@ func (ec *executionContext) _Query_hintahistoria(ctx context.Context, field grap
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_hintahistoria_args(ctx, rawArgs)
+	args, err := ec.field_Query_pricehistory_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -2067,7 +2072,7 @@ func (ec *executionContext) _Query_hintahistoria(ctx context.Context, field grap
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Hintahistoria(rctx, args["productID"].(string))
+		return ec.resolvers.Query().Pricehistory(rctx, args["productID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2079,12 +2084,12 @@ func (ec *executionContext) _Query_hintahistoria(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.Hinta)
+	res := resTmp.([]model.Price)
 	fc.Result = res
-	return ec.marshalNHinta2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐHintaᚄ(ctx, field.Selections, res)
+	return ec.marshalNPrice2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐPriceᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_hinnat(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_prices(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2102,7 +2107,7 @@ func (ec *executionContext) _Query_hinnat(ctx context.Context, field graphql.Col
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Hinnat(rctx)
+		return ec.resolvers.Query().Prices(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2114,12 +2119,12 @@ func (ec *executionContext) _Query_hinnat(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.Hinta)
+	res := resTmp.([]model.Price)
 	fc.Result = res
-	return ec.marshalNHinta2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐHintaᚄ(ctx, field.Selections, res)
+	return ec.marshalNPrice2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐPriceᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_oluet(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_beers(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2137,7 +2142,7 @@ func (ec *executionContext) _Query_oluet(ctx context.Context, field graphql.Coll
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Oluet(rctx)
+		return ec.resolvers.Query().Beers(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2149,12 +2154,12 @@ func (ec *executionContext) _Query_oluet(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.Juoma)
+	res := resTmp.([]model.Drink)
 	fc.Result = res
-	return ec.marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
+	return ec.marshalNDrink2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrinkᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_olutsearch(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_beersearch(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2171,7 +2176,7 @@ func (ec *executionContext) _Query_olutsearch(ctx context.Context, field graphql
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_olutsearch_args(ctx, rawArgs)
+	args, err := ec.field_Query_beersearch_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -2179,7 +2184,7 @@ func (ec *executionContext) _Query_olutsearch(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Olutsearch(rctx, args["term"].(string))
+		return ec.resolvers.Query().Beersearch(rctx, args["term"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2191,9 +2196,9 @@ func (ec *executionContext) _Query_olutsearch(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]model.Juoma)
+	res := resTmp.([]model.Drink)
 	fc.Result = res
-	return ec.marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuomaᚄ(ctx, field.Selections, res)
+	return ec.marshalNDrink2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrinkᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3362,133 +3367,91 @@ func (ec *executionContext) ___Type_ofType(ctx context.Context, field graphql.Co
 
 // region    **************************** object.gotpl ****************************
 
-var hintaImplementors = []string{"Hinta"}
+var drinkImplementors = []string{"Drink"}
 
-func (ec *executionContext) _Hinta(ctx context.Context, sel ast.SelectionSet, obj *model.Hinta) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, hintaImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Hinta")
-		case "id":
-			out.Values[i] = ec._Hinta_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "date":
-			out.Values[i] = ec._Hinta_date(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "productId":
-			out.Values[i] = ec._Hinta_productId(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "hinta":
-			out.Values[i] = ec._Hinta_hinta(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var juomaImplementors = []string{"Juoma"}
-
-func (ec *executionContext) _Juoma(ctx context.Context, sel ast.SelectionSet, obj *model.Juoma) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, juomaImplementors)
+func (ec *executionContext) _Drink(ctx context.Context, sel ast.SelectionSet, obj *model.Drink) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, drinkImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("Juoma")
+			out.Values[i] = graphql.MarshalString("Drink")
 		case "id":
-			out.Values[i] = ec._Juoma_id(ctx, field, obj)
+			out.Values[i] = ec._Drink_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "date":
-			out.Values[i] = ec._Juoma_date(ctx, field, obj)
+			out.Values[i] = ec._Drink_date(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "productID":
-			out.Values[i] = ec._Juoma_productID(ctx, field, obj)
+			out.Values[i] = ec._Drink_productID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "nimi":
-			out.Values[i] = ec._Juoma_nimi(ctx, field, obj)
+			out.Values[i] = ec._Drink_nimi(ctx, field, obj)
 		case "valmistaja":
-			out.Values[i] = ec._Juoma_valmistaja(ctx, field, obj)
+			out.Values[i] = ec._Drink_valmistaja(ctx, field, obj)
 		case "pulloKoko":
-			out.Values[i] = ec._Juoma_pulloKoko(ctx, field, obj)
+			out.Values[i] = ec._Drink_pulloKoko(ctx, field, obj)
 		case "hinta":
-			out.Values[i] = ec._Juoma_hinta(ctx, field, obj)
+			out.Values[i] = ec._Drink_hinta(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "litraHinta":
-			out.Values[i] = ec._Juoma_litraHinta(ctx, field, obj)
+			out.Values[i] = ec._Drink_litraHinta(ctx, field, obj)
 		case "uutuus":
-			out.Values[i] = ec._Juoma_uutuus(ctx, field, obj)
+			out.Values[i] = ec._Drink_uutuus(ctx, field, obj)
 		case "hinnastoJarjestysKoodi":
-			out.Values[i] = ec._Juoma_hinnastoJarjestysKoodi(ctx, field, obj)
+			out.Values[i] = ec._Drink_hinnastoJarjestysKoodi(ctx, field, obj)
 		case "tyyppi":
-			out.Values[i] = ec._Juoma_tyyppi(ctx, field, obj)
+			out.Values[i] = ec._Drink_tyyppi(ctx, field, obj)
 		case "alaTyyppi":
-			out.Values[i] = ec._Juoma_alaTyyppi(ctx, field, obj)
+			out.Values[i] = ec._Drink_alaTyyppi(ctx, field, obj)
 		case "erityisRyhma":
-			out.Values[i] = ec._Juoma_erityisRyhma(ctx, field, obj)
+			out.Values[i] = ec._Drink_erityisRyhma(ctx, field, obj)
 		case "olutTyyppi":
-			out.Values[i] = ec._Juoma_olutTyyppi(ctx, field, obj)
+			out.Values[i] = ec._Drink_olutTyyppi(ctx, field, obj)
 		case "valmistusMaa":
-			out.Values[i] = ec._Juoma_valmistusMaa(ctx, field, obj)
+			out.Values[i] = ec._Drink_valmistusMaa(ctx, field, obj)
 		case "alue":
-			out.Values[i] = ec._Juoma_alue(ctx, field, obj)
+			out.Values[i] = ec._Drink_alue(ctx, field, obj)
 		case "vuosiKerta":
-			out.Values[i] = ec._Juoma_vuosiKerta(ctx, field, obj)
+			out.Values[i] = ec._Drink_vuosiKerta(ctx, field, obj)
 		case "etikettiMerkintoja":
-			out.Values[i] = ec._Juoma_etikettiMerkintoja(ctx, field, obj)
+			out.Values[i] = ec._Drink_etikettiMerkintoja(ctx, field, obj)
 		case "huomautus":
-			out.Values[i] = ec._Juoma_huomautus(ctx, field, obj)
+			out.Values[i] = ec._Drink_huomautus(ctx, field, obj)
 		case "rypaleet":
-			out.Values[i] = ec._Juoma_rypaleet(ctx, field, obj)
+			out.Values[i] = ec._Drink_rypaleet(ctx, field, obj)
 		case "luonnehdinta":
-			out.Values[i] = ec._Juoma_luonnehdinta(ctx, field, obj)
+			out.Values[i] = ec._Drink_luonnehdinta(ctx, field, obj)
 		case "pakkausTyyppi":
-			out.Values[i] = ec._Juoma_pakkausTyyppi(ctx, field, obj)
+			out.Values[i] = ec._Drink_pakkausTyyppi(ctx, field, obj)
 		case "suljentaTyyppi":
-			out.Values[i] = ec._Juoma_suljentaTyyppi(ctx, field, obj)
+			out.Values[i] = ec._Drink_suljentaTyyppi(ctx, field, obj)
 		case "alkoholiProsentti":
-			out.Values[i] = ec._Juoma_alkoholiProsentti(ctx, field, obj)
+			out.Values[i] = ec._Drink_alkoholiProsentti(ctx, field, obj)
 		case "hapotGL":
-			out.Values[i] = ec._Juoma_hapotGL(ctx, field, obj)
+			out.Values[i] = ec._Drink_hapotGL(ctx, field, obj)
 		case "sokeriGL":
-			out.Values[i] = ec._Juoma_sokeriGL(ctx, field, obj)
+			out.Values[i] = ec._Drink_sokeriGL(ctx, field, obj)
 		case "kantavierrep":
-			out.Values[i] = ec._Juoma_kantavierrep(ctx, field, obj)
+			out.Values[i] = ec._Drink_kantavierrep(ctx, field, obj)
 		case "vari":
-			out.Values[i] = ec._Juoma_vari(ctx, field, obj)
+			out.Values[i] = ec._Drink_vari(ctx, field, obj)
 		case "katkerot":
-			out.Values[i] = ec._Juoma_katkerot(ctx, field, obj)
+			out.Values[i] = ec._Drink_katkerot(ctx, field, obj)
 		case "energia100ML":
-			out.Values[i] = ec._Juoma_energia100ML(ctx, field, obj)
+			out.Values[i] = ec._Drink_energia100ML(ctx, field, obj)
 		case "valikoima":
-			out.Values[i] = ec._Juoma_valikoima(ctx, field, obj)
+			out.Values[i] = ec._Drink_valikoima(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3515,8 +3478,50 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
-		case "newjuomas":
-			out.Values[i] = ec._Mutation_newjuomas(ctx, field)
+		case "newdrinks":
+			out.Values[i] = ec._Mutation_newdrinks(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var priceImplementors = []string{"Price"}
+
+func (ec *executionContext) _Price(ctx context.Context, sel ast.SelectionSet, obj *model.Price) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, priceImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Price")
+		case "id":
+			out.Values[i] = ec._Price_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "date":
+			out.Values[i] = ec._Price_date(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "productId":
+			out.Values[i] = ec._Price_productId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "hinta":
+			out.Values[i] = ec._Price_hinta(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -3546,7 +3551,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "juoma":
+		case "drink":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3554,13 +3559,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_juoma(ctx, field)
+				res = ec._Query_drink(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "juomasearch":
+		case "drinksearch":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3568,13 +3573,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_juomasearch(ctx, field)
+				res = ec._Query_drinksearch(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "juomat":
+		case "drinks":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3582,13 +3587,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_juomat(ctx, field)
+				res = ec._Query_drinks(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "hintahistoria":
+		case "pricehistory":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3596,13 +3601,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_hintahistoria(ctx, field)
+				res = ec._Query_pricehistory(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "hinnat":
+		case "prices":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3610,13 +3615,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_hinnat(ctx, field)
+				res = ec._Query_prices(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "oluet":
+		case "beers":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3624,13 +3629,13 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_oluet(ctx, field)
+				res = ec._Query_beers(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
 				return res
 			})
-		case "olutsearch":
+		case "beersearch":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -3638,7 +3643,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_olutsearch(ctx, field)
+				res = ec._Query_beersearch(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -3919,26 +3924,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
-	res, err := graphql.UnmarshalFloat(v)
-	return res, graphql.ErrorOnPath(ctx, err)
+func (ec *executionContext) marshalNDrink2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrink(ctx context.Context, sel ast.SelectionSet, v model.Drink) graphql.Marshaler {
+	return ec._Drink(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
-	res := graphql.MarshalFloat(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-	}
-	return res
-}
-
-func (ec *executionContext) marshalNHinta2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐHinta(ctx context.Context, sel ast.SelectionSet, v model.Hinta) graphql.Marshaler {
-	return ec._Hinta(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNHinta2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐHintaᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Hinta) graphql.Marshaler {
+func (ec *executionContext) marshalNDrink2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrinkᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Drink) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3962,7 +3952,7 @@ func (ec *executionContext) marshalNHinta2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNHinta2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐHinta(ctx, sel, v[i])
+			ret[i] = ec.marshalNDrink2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrink(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3973,6 +3963,31 @@ func (ec *executionContext) marshalNHinta2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑo
 	}
 	wg.Wait()
 	return ret
+}
+
+func (ec *executionContext) marshalNDrink2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐDrink(ctx context.Context, sel ast.SelectionSet, v *model.Drink) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Drink(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	res, err := graphql.UnmarshalFloat(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloat(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) unmarshalNID2int(ctx context.Context, v interface{}) (int, error) {
@@ -4005,11 +4020,11 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) marshalNJuoma2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuoma(ctx context.Context, sel ast.SelectionSet, v model.Juoma) graphql.Marshaler {
-	return ec._Juoma(ctx, sel, &v)
+func (ec *executionContext) marshalNPrice2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐPrice(ctx context.Context, sel ast.SelectionSet, v model.Price) graphql.Marshaler {
+	return ec._Price(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuomaᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Juoma) graphql.Marshaler {
+func (ec *executionContext) marshalNPrice2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐPriceᚄ(ctx context.Context, sel ast.SelectionSet, v []model.Price) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4033,7 +4048,7 @@ func (ec *executionContext) marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNJuoma2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuoma(ctx, sel, v[i])
+			ret[i] = ec.marshalNPrice2githubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐPrice(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4044,16 +4059,6 @@ func (ec *executionContext) marshalNJuoma2ᚕgithubᚗcomᚋjapiirainenᚋgoᚑo
 	}
 	wg.Wait()
 	return ret
-}
-
-func (ec *executionContext) marshalNJuoma2ᚖgithubᚗcomᚋjapiirainenᚋgoᚑoluetᚑapiᚋgqlᚋmodelᚐJuoma(ctx context.Context, sel ast.SelectionSet, v *model.Juoma) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Juoma(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {

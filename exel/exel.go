@@ -20,8 +20,8 @@ var FileLocation = filepath.Join("exel", "data", "alkoFile.xlsx")
 //AlkoFileURI is the URI that the price file gets downloaded from
 const AlkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Site/-/Alko-OnlineShop/fi_FI/Alkon%20Hinnasto%20Tekstitiedostona/alkon-hinnasto-tekstitiedostona.xlsx"
 
-// Juoma is a type for one drink
-type Juoma struct {
+// Drink is a type for one drink
+type Drink struct {
 	Date                   time.Time
 	ProductID              int
 	Nimi                   string
@@ -55,7 +55,7 @@ type Juoma struct {
 }
 
 //ReadXlsx returns all data from alko price file.
-func ReadXlsx() ([]Juoma, error) {
+func ReadXlsx() ([]Drink, error) {
 	f, err := excelize.OpenFile(FileLocation)
 	if err != nil {
 		log.Fatal(err)
@@ -64,13 +64,13 @@ func ReadXlsx() ([]Juoma, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	res := []Juoma{}
+	res := []Drink{}
 
 	date := strings.TrimPrefix(rows[0][0], "Alkon hinnasto ")
 	parsedDate := helpers.ParseTime(date)
 
 	for _, row := range rows[4:] {
-		temp := Juoma{Date: parsedDate,
+		temp := Drink{Date: parsedDate,
 			ProductID:              helpers.ToInt(row[0]),
 			Nimi:                   row[1],
 			Valmistaja:             row[2],
