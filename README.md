@@ -1,4 +1,7 @@
-# go-oluet-api
+# Oluet-api
+
+API for finding information about you favorive alcoholic beverages!😎
+(not only beer!)
 
 ![cool beer picture](https://cdn1.iconfinder.com/data/icons/zaficons-foods-1/512/beer-512.png) 
 
