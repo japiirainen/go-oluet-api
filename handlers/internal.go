@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/japiirainen/go-oluet-api/db"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,5 +16,7 @@ func GetInternal(rw http.ResponseWriter, r *http.Request) {
 
 //DailyUpdate is the handler for POST /internal
 func DailyUpdate(rw http.ResponseWriter, r *http.Request) {
+	conn := db.Connect()
+	defer conn.CloseConnection()
 	log.Info("handlers: POST /internal")
 }

@@ -7,3 +7,4 @@
 ## TODO
 1. descs for juoma
 2. maybe make a separate type for olut
+3. daily update rest internal route

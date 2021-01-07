@@ -33,8 +33,8 @@ func main() {
 	if port == "" {
 		port = defaultPort
 	}
-	c := db.Connect()
-	defer c.CloseConnection()
+	psql := db.Connect()
+	defer psql.CloseConnection()
 	r := mux.NewRouter().StrictSlash(false)
 
 	//Home routes
@@ -54,7 +54,7 @@ func main() {
 
 	//graphql routes
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{
-		DB: c,
+		DB: psql,
 	}}))
 	r.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
 	r.Handle("/graphql/query", srv)
