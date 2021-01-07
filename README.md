@@ -1,6 +1,7 @@
 # go-oluet-api
 
 ![cool beer picture](https://cdn1.iconfinder.com/data/icons/zaficons-foods-1/512/beer-512.png)
+![another beer picture](https://cdn0.iconfinder.com/data/icons/alcohol-2-colors/512/white_beer-01-512.png)
 
 ## This is a rewrite of my oluet-api in go!
 
