@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"net/http"
@@ -12,10 +11,13 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	"github.com/japiirainen/go-oluet-api/db"
 	"github.com/japiirainen/go-oluet-api/gql/generated"
 	"github.com/japiirainen/go-oluet-api/gql/resolvers"
+	"github.com/japiirainen/go-oluet-api/handlers"
+	"github.com/japiirainen/go-oluet-api/middleware"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -33,12 +35,22 @@ func main() {
 	}
 	c := db.Connect()
 	defer c.CloseConnection()
-	r := mux.NewRouter()
+	r := mux.NewRouter().StrictSlash(false)
+
+	//Home routes
+	home := r.Path("/").Subrouter()
+	home.Methods("GET").HandlerFunc(handlers.HomeHandler)
 
 	//internal routes
-	r.HandleFunc("/foo", func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]bool{"ok": true})
-	})
+	internalBase := mux.NewRouter()
+	r.PathPrefix("/internal").Handler(negroni.New(
+		negroni.NewRecovery(),
+		negroni.HandlerFunc(middleware.CheckAuth),
+		negroni.Wrap(internalBase),
+	))
+	internal := internalBase.PathPrefix("/internal").Subrouter()
+	internal.Methods("GET").HandlerFunc(handlers.GetInternal)
+	internal.Methods("POST").HandlerFunc(handlers.DailyUpdate)
 
 	//graphql routes
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{
