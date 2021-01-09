@@ -10,6 +10,4 @@ API for finding information about you favorive alcoholic beverages!😎
 - The poject was originally written in nodejs, but I decided to start learning glo and thought this was a good place to start exploring!
 
 ## TODO
-1. descs for juoma
-2. maybe make a separate type for olut
-3. daily update rest internal route
+1. maybe make a separate type for olut
