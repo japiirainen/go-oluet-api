@@ -15,7 +15,7 @@ import (
 )
 
 //FileLocation is the location of the prie file
-var FileLocation = filepath.Join("exel", "data", "alkoFil.xlsx")
+var FileLocation = filepath.Join("exel", "data", "alkoFile.xlsx")
 
 //AlkoFileURI is the URI that the price file gets downloaded from
 const AlkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Site/-/Alko-OnlineShop/fi_FI/Alkon%20Hinnasto%20Tekstitiedostona/alkon-hinnasto-tekstitiedostona.xlsx"
