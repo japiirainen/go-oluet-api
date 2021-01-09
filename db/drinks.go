@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/japiirainen/go-oluet-api/exel"
@@ -18,18 +19,24 @@ func (db *Db) InsertManyDrinks() (string, error) {
 		log.Errorf("db: %s", err)
 		return "err during exel read", err
 	}
-	go func() {
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
 		OK, jerr := db.insertDrinks(&val)
 		if !OK {
 			log.Errorf("db: %s", jerr)
 		}
-	}()
-	go func() {
+	}(&wg)
+	wg.Add(1)
+	go func(wg *sync.WaitGroup) {
+		defer wg.Done()
 		OK2, herr := db.CreatePrices(&val)
 		if !OK2 {
 			log.Fatal(herr)
 		}
-	}()
+	}(&wg)
+	wg.Wait()
 	return "OK", nil
 }
 
