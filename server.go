@@ -57,9 +57,9 @@ func main() {
 		DB: psql,
 	}}))
 	r.Handle("/graphql", playground.Handler("GraphQL playground", "/query"))
-	r.Handle("/graphql/query", srv)
+	r.Handle("/query", srv)
 	log.Infof("playground @ -> http://localhost:%s/graphql", port)
-	log.Infof("query graphql @ -> http://localhost:%s/graphql/query", port)
+	log.Infof("query graphql @ -> http://localhost:%s/query", port)
 
 	s := &http.Server{
 		Handler: r,

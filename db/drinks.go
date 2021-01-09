@@ -1,6 +1,7 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -80,20 +81,9 @@ func (db *Db) GetAllDrinks() ([]model.Drink, error) {
 		log.Errorf("db: %s", err)
 	}
 	defer rows.Close()
-
-	var drinks []model.Drink
-	for rows.Next() {
-		var drink model.Drink
-		err := rows.Scan(&drink.ID, &drink.Date, &drink.ProductID, &drink.Nimi, &drink.Valikoima, &drink.PulloKoko, &drink.Hinta, &drink.LitraHinta, &drink.Uutuus, &drink.HinnastoJarjestysKoodi, &drink.Tyyppi, &drink.AlaTyyppi, &drink.ErityisRyhma, &drink.OlutTyyppi, &drink.ValmistusMaa, &drink.Alue, &drink.VuosiKerta, &drink.EtikettiMerkintoja, &drink.Huomautus, &drink.Rypaleet, &drink.Luonnehdinta, &drink.PakkausTyyppi, &drink.SuljentaTyyppi, &drink.AlkoholiProsentti, &drink.HapotGl, &drink.SokeriGl, &drink.Kantavierrep, &drink.Vari, &drink.Katkerot, &drink.Energia100ml, &drink.Valikoima)
-		if err != nil {
-			log.Errorf("db: %s", err)
-		}
-
-		drinks = append(drinks, drink)
-	}
-
-	if err = rows.Err(); err != nil {
-		log.Errorf("db: %s", err)
+	drinks, scanErr := scanDrinks(rows)
+	if scanErr != nil {
+		log.Errorf("db: failed to scan juoma: %v\n", err)
 	}
 	return drinks, nil
 }
@@ -123,14 +113,9 @@ func (db *Db) SearchForDrink(term string) (j []model.Drink, error error) {
 	if err != nil {
 		log.Errorf("db: failed to find juoma: %v\n", err)
 	}
-	var drinks []model.Drink
-	for rows.Next() {
-		var drink model.Drink
-		scanErr := rows.Scan(&drink.ID, &drink.Date, &drink.ProductID, &drink.Nimi, &drink.Valikoima, &drink.PulloKoko, &drink.Hinta, &drink.LitraHinta, &drink.Uutuus, &drink.HinnastoJarjestysKoodi, &drink.Tyyppi, &drink.AlaTyyppi, &drink.ErityisRyhma, &drink.OlutTyyppi, &drink.ValmistusMaa, &drink.Alue, &drink.VuosiKerta, &drink.EtikettiMerkintoja, &drink.Huomautus, &drink.Rypaleet, &drink.Luonnehdinta, &drink.PakkausTyyppi, &drink.SuljentaTyyppi, &drink.AlkoholiProsentti, &drink.HapotGl, &drink.SokeriGl, &drink.Kantavierrep, &drink.Vari, &drink.Katkerot, &drink.Energia100ml, &drink.Valikoima)
-		if scanErr != nil {
-			log.Errorf("db: failed to scan juoma: %v\n", err)
-		}
-		drinks = append(drinks, drink)
+	drinks, scanErr := scanDrinks(rows)
+	if scanErr != nil {
+		log.Errorf("db: failed to scan drinks: %v\n", err)
 	}
 	return drinks, nil
 }
@@ -142,14 +127,9 @@ func (db *Db) GetAllBeers() (d []model.Drink, error error) {
 		log.Errorf("db: %s", err)
 	}
 	defer rows.Close()
-	var drinks []model.Drink
-	for rows.Next() {
-		var drink model.Drink
-		err := rows.Scan(&drink.ID, &drink.Date, &drink.ProductID, &drink.Nimi, &drink.Valikoima, &drink.PulloKoko, &drink.Hinta, &drink.LitraHinta, &drink.Uutuus, &drink.HinnastoJarjestysKoodi, &drink.Tyyppi, &drink.AlaTyyppi, &drink.ErityisRyhma, &drink.OlutTyyppi, &drink.ValmistusMaa, &drink.Alue, &drink.VuosiKerta, &drink.EtikettiMerkintoja, &drink.Huomautus, &drink.Rypaleet, &drink.Luonnehdinta, &drink.PakkausTyyppi, &drink.SuljentaTyyppi, &drink.AlkoholiProsentti, &drink.HapotGl, &drink.SokeriGl, &drink.Kantavierrep, &drink.Vari, &drink.Katkerot, &drink.Energia100ml, &drink.Valikoima)
-		if err != nil {
-			log.Errorf("db: scan failed: %s", err)
-		}
-		drinks = append(drinks, drink)
+	drinks, scanErr := scanDrinks(rows)
+	if scanErr != nil {
+		log.Errorf("db: failed to scan drinks: %v\n", err)
 	}
 	return drinks, nil
 }
@@ -160,14 +140,22 @@ func (db *Db) SearchForBeer(term string) (d []model.Drink, error error) {
 	rows, err := db.conn.Query(qstr)
 	defer rows.Close()
 	if err != nil {
-		log.Errorf("db: failed to find juoma: %v\n", err)
+		log.Errorf("db: %v\n", err)
 	}
+	drinks, scanErr := scanDrinks(rows)
+	if scanErr != nil {
+		log.Errorf("db: failed to find drinks: %v\n", err)
+	}
+	return drinks, nil
+}
+
+func scanDrinks(rows *sql.Rows) (ds []model.Drink, error error) {
 	var drinks []model.Drink
 	for rows.Next() {
 		var drink model.Drink
-		scanErr := rows.Scan(&drink.ID, &drink.Date, &drink.ProductID, &drink.Nimi, &drink.Valikoima, &drink.PulloKoko, &drink.Hinta, &drink.LitraHinta, &drink.Uutuus, &drink.HinnastoJarjestysKoodi, &drink.Tyyppi, &drink.AlaTyyppi, &drink.ErityisRyhma, &drink.OlutTyyppi, &drink.ValmistusMaa, &drink.Alue, &drink.VuosiKerta, &drink.EtikettiMerkintoja, &drink.Huomautus, &drink.Rypaleet, &drink.Luonnehdinta, &drink.PakkausTyyppi, &drink.SuljentaTyyppi, &drink.AlkoholiProsentti, &drink.HapotGl, &drink.SokeriGl, &drink.Kantavierrep, &drink.Vari, &drink.Katkerot, &drink.Energia100ml, &drink.Valikoima)
-		if scanErr != nil {
-			log.Errorf("db: failed to scan juoma: %v\n", err)
+		err := rows.Scan(&drink.ID, &drink.Date, &drink.ProductID, &drink.Nimi, &drink.Valikoima, &drink.PulloKoko, &drink.Hinta, &drink.LitraHinta, &drink.Uutuus, &drink.HinnastoJarjestysKoodi, &drink.Tyyppi, &drink.AlaTyyppi, &drink.ErityisRyhma, &drink.OlutTyyppi, &drink.ValmistusMaa, &drink.Alue, &drink.VuosiKerta, &drink.EtikettiMerkintoja, &drink.Huomautus, &drink.Rypaleet, &drink.Luonnehdinta, &drink.PakkausTyyppi, &drink.SuljentaTyyppi, &drink.AlkoholiProsentti, &drink.HapotGl, &drink.SokeriGl, &drink.Kantavierrep, &drink.Vari, &drink.Katkerot, &drink.Energia100ml, &drink.Valikoima)
+		if err != nil {
+			return nil, err
 		}
 		drinks = append(drinks, drink)
 	}
