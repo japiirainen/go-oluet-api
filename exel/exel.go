@@ -15,7 +15,7 @@ import (
 )
 
 //FileLocation is the location of the prie file
-var FileLocation = filepath.Join("exel", "data", "alkoFile.xlsx")
+var FileLocation = filepath.Join("exel", "data", "alkoFil.xlsx")
 
 //AlkoFileURI is the URI that the price file gets downloaded from
 const AlkoFileURI = "https://www.alko.fi/INTERSHOP/static/WFS/Alko-OnlineShop-Site/-/Alko-OnlineShop/fi_FI/Alkon%20Hinnasto%20Tekstitiedostona/alkon-hinnasto-tekstitiedostona.xlsx"
@@ -55,9 +55,9 @@ type Drink struct {
 }
 
 //ReadXlsx returns all data from alko price file.
-func ReadXlsx() ([]Drink, error) {
+func ReadXlsx(filepath string) ([]Drink, error) {
 	defer helpers.Duration(time.Now(), "readExel")
-	f, err := excelize.OpenFile(FileLocation)
+	f, err := excelize.OpenFile(filepath)
 	if err != nil {
 		log.Fatal(err)
 	}

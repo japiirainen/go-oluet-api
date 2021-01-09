@@ -14,7 +14,7 @@ import (
 
 //InsertManyDrinks reads the alko file and inserts everything to postgres
 func (db *Db) InsertManyDrinks() (string, error) {
-	val, err := exel.ReadXlsx()
+	val, err := exel.ReadXlsx(exel.FileLocation)
 	if err != nil {
 		log.Errorf("db: %s", err)
 		return "err during exel read", err
@@ -23,7 +23,7 @@ func (db *Db) InsertManyDrinks() (string, error) {
 	wg.Add(1)
 	go func(wg *sync.WaitGroup) {
 		defer wg.Done()
-		OK, jerr := db.insertDrinks(&val)
+		OK, jerr := db.InsertDrinks(&val)
 		if !OK {
 			log.Errorf("db: %s", jerr)
 		}
@@ -40,7 +40,8 @@ func (db *Db) InsertManyDrinks() (string, error) {
 	return "OK", nil
 }
 
-func (db *Db) insertDrinks(drinks *[]exel.Drink) (OK bool, error error) {
+//InsertDrinks reads the exel file and inserts to postgres
+func (db *Db) InsertDrinks(drinks *[]exel.Drink) (OK bool, error error) {
 	defer helpers.Duration(time.Now(), "insertDrinks")
 	stmt, prepErr := db.conn.Prepare("INSERT INTO drink (Date," +
 		" ProductID," +
@@ -158,6 +159,16 @@ func (db *Db) SearchForBeer(term string) (d []model.Drink, error error) {
 		log.Errorf("db: failed to find drinks: %v\n", err)
 	}
 	return drinks, nil
+}
+
+// DeleteDrinks deletes all the drinks from the db
+func (db *Db) DeleteDrinks() error {
+	defer helpers.Duration(time.Now(), "deleteDrinks")
+	_, err := db.conn.Exec("DELETE FROM drink")
+	if err != nil {
+		log.Errorf("db: failed to delete drinks: %s\n", err)
+	}
+	return nil
 }
 
 func scanDrinks(rows *sql.Rows) (ds []model.Drink, error error) {
