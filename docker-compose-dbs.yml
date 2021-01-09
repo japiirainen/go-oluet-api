@@ -15,4 +15,4 @@ services:
       POSTGRES_USER: dev
       POSTGRES_DB: oluet_api_dev
     ports:
-     - 5432:5432
+    - 5432:5432

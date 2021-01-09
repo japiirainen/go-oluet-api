@@ -1,8 +1,8 @@
 compose-app:
-	- docker-compose -f docker-compose-app.yml up 
+	- docker-compose -f docker-compose-app.yml up --build --remove-orphans
 
 compose-dbs:
-	- docker-compose -f docker-compose-dbs.yml up
+	- docker-compose -f docker-compose-dbs.yml up --remove-orphans
 
 gen:
 	- @echo "generating..."

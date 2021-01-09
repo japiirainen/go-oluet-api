@@ -6,13 +6,15 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . .
+COPY . /app
 
-RUN ./gen.sh
+WORKDIR /app
+
+RUN make gen
 
 # Build the Go app
-RUN go build -o main .
+RUN go build -o server .
 
-EXPOSE 8080
+EXPOSE 5000
 
-CMD ["./main"]
+CMD ["/app/server"]
