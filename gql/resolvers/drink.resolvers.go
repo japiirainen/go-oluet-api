@@ -7,15 +7,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (r *mutationResolver) Newdrinks(ctx context.Context) (string, error) {
-	log.Info("resolvers: Newdrinks")
-	res, err := r.DB.InsertManyDrinks()
-	if err != nil {
-		log.Errorf("resolvers: %s", err)
-	}
-	return res, nil
-}
-
 func (r *queryResolver) Drink(ctx context.Context, productID string) (*model.Drink, error) {
 	log.Info("resolvers: Drink")
 	res, err := r.DB.GetDrinkByProdID(productID)

@@ -36,7 +36,6 @@ type Config struct {
 }
 
 type ResolverRoot interface {
-	Mutation() MutationResolver
 	Query() QueryResolver
 }
 
@@ -78,10 +77,6 @@ type ComplexityRoot struct {
 		VuosiKerta             func(childComplexity int) int
 	}
 
-	Mutation struct {
-		Newdrinks func(childComplexity int) int
-	}
-
 	Price struct {
 		Date      func(childComplexity int) int
 		Hinta     func(childComplexity int) int
@@ -100,9 +95,6 @@ type ComplexityRoot struct {
 	}
 }
 
-type MutationResolver interface {
-	Newdrinks(ctx context.Context) (string, error)
-}
 type QueryResolver interface {
 	Drink(ctx context.Context, productID string) (*model.Drink, error)
 	Drinksearch(ctx context.Context, term string) ([]model.Drink, error)
@@ -345,13 +337,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Drink.VuosiKerta(childComplexity), true
 
-	case "Mutation.newdrinks":
-		if e.complexity.Mutation.Newdrinks == nil {
-			break
-		}
-
-		return e.complexity.Mutation.Newdrinks(childComplexity), true
-
 	case "Price.date":
 		if e.complexity.Price.Date == nil {
 			break
@@ -473,20 +458,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 				Data: buf.Bytes(),
 			}
 		}
-	case ast.Mutation:
-		return func(ctx context.Context) *graphql.Response {
-			if !first {
-				return nil
-			}
-			first = false
-			data := ec._Mutation(ctx, rc.Operation.SelectionSet)
-			var buf bytes.Buffer
-			data.MarshalGQL(&buf)
-
-			return &graphql.Response{
-				Data: buf.Bytes(),
-			}
-		}
 
 	default:
 		return graphql.OneShot(graphql.ErrorResponse(ctx, "unsupported GraphQL operation"))
@@ -513,10 +484,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "gql/schema/mutation.graphql", Input: `type Mutation {
-  newdrinks: String!
-}
-`, BuiltIn: false},
+	{Name: "gql/schema/mutation.graphql", Input: ``, BuiltIn: false},
 	{Name: "gql/schema/query.graphql", Input: `type Query {
   """
   Returns one juoma when given a correct productID
@@ -573,7 +541,6 @@ scalar Upload
 `, BuiltIn: false},
 	{Name: "gql/schema/schema.graphql", Input: `schema {
   query: Query
-  mutation: Mutation
 }
 `, BuiltIn: false},
 	{Name: "gql/schema/types/drink.graphql", Input: `type Drink {
@@ -1751,41 +1718,6 @@ func (ec *executionContext) _Drink_valikoima(ctx context.Context, field graphql.
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalOString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Mutation_newdrinks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		Args:       nil,
-		IsMethod:   true,
-		IsResolver: true,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().Newdrinks(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Price_id(ctx context.Context, field graphql.CollectedField, obj *model.Price) (ret graphql.Marshaler) {
@@ -3452,37 +3384,6 @@ func (ec *executionContext) _Drink(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Drink_energia100ML(ctx, field, obj)
 		case "valikoima":
 			out.Values[i] = ec._Drink_valikoima(ctx, field, obj)
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var mutationImplementors = []string{"Mutation"}
-
-func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, mutationImplementors)
-
-	ctx = graphql.WithFieldContext(ctx, &graphql.FieldContext{
-		Object: "Mutation",
-	})
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Mutation")
-		case "newdrinks":
-			out.Values[i] = ec._Mutation_newdrinks(ctx, field)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
