@@ -18,14 +18,18 @@ func (db *Db) InsertManyDrinks() (string, error) {
 		log.Errorf("db: %s", err)
 		return "err during exel read", err
 	}
-	OK, jerr := db.insertDrinks(&val)
-	if !OK {
-		log.Errorf("db: %s", jerr)
-	}
-	OK2, herr := db.CreatePrices(&val)
-	if !OK2 {
-		log.Fatal(herr)
-	}
+	go func() {
+		OK, jerr := db.insertDrinks(&val)
+		if !OK {
+			log.Errorf("db: %s", jerr)
+		}
+	}()
+	go func() {
+		OK2, herr := db.CreatePrices(&val)
+		if !OK2 {
+			log.Fatal(herr)
+		}
+	}()
 	return "OK", nil
 }
 

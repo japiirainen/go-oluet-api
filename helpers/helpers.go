@@ -1,10 +1,11 @@
 package helpers
 
 import (
-	"log"
 	"strconv"
 	"strings"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 //ToFloat converts string values to float64
@@ -34,5 +35,5 @@ func ParseTime(timeStr string) time.Time {
 func Duration(invocation time.Time, name string) {
 	elapsed := time.Since(invocation)
 
-	log.Printf("%s lasted %s", name, elapsed)
+	log.Infof("%s lasted %s", name, elapsed)
 }

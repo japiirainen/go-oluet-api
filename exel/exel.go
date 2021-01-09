@@ -3,7 +3,6 @@ package exel
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/japiirainen/go-oluet-api/helpers"
+	log "github.com/sirupsen/logrus"
 )
 
 //FileLocation is the location of the prie file
@@ -56,6 +56,7 @@ type Drink struct {
 
 //ReadXlsx returns all data from alko price file.
 func ReadXlsx() ([]Drink, error) {
+	defer helpers.Duration(time.Now(), "readExel")
 	f, err := excelize.OpenFile(FileLocation)
 	if err != nil {
 		log.Fatal(err)
@@ -107,6 +108,7 @@ func ReadXlsx() ([]Drink, error) {
 
 // Download loads the file using http
 func Download(filepath string, url string) error {
+	defer helpers.Duration(time.Now(), "Download")
 	resp, err := http.Get(url)
 	if err != nil {
 		return err

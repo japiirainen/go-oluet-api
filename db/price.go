@@ -1,12 +1,16 @@
 package db
 
 import (
+	"time"
+
 	"github.com/japiirainen/go-oluet-api/exel"
 	"github.com/japiirainen/go-oluet-api/gql/model"
+	"github.com/japiirainen/go-oluet-api/helpers"
 )
 
 //CreatePrices creates new prices for juomas
 func (db *Db) CreatePrices(drinks *[]exel.Drink) (OK bool, error error) {
+	defer helpers.Duration(time.Now(), "insertPrices")
 	stmp, stmpErr := db.conn.Prepare("INSERT INTO price (Date, ProductID, Hinta) VALUES ($1, $2, $3)")
 	if stmpErr != nil {
 		return false, stmpErr
