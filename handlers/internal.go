@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
@@ -21,7 +22,8 @@ func GetInternal(rw http.ResponseWriter, r *http.Request) {
 func DailyUpdate(rw http.ResponseWriter, r *http.Request) {
 	log.Info("handlers: POST /internal")
 	var wg sync.WaitGroup
-	conn := db.Connect()
+	dbURL := os.Getenv("DATABASE_URL")
+	conn := db.Connect(dbURL)
 	defer conn.CloseConnection()
 	// download file from alko website
 	dErr := exel.Download(exel.FileLocation, exel.AlkoFileURI)

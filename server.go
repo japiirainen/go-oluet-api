@@ -18,23 +18,33 @@ import (
 	"github.com/japiirainen/go-oluet-api/gql/resolvers"
 	"github.com/japiirainen/go-oluet-api/handlers"
 	"github.com/japiirainen/go-oluet-api/middleware"
+	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 )
 
 const defaultPort = "5000"
 
 func main() {
-	// db.MigrateUp()
 	var wait time.Duration
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
+
+	// load env
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Errorf("%s", err)
+		panic("env not found")
+	}
+	dbURL := os.Getenv("DATABASE_URL")
 
 	log.SetFormatter(&log.TextFormatter{})
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
-	psql := db.Connect()
+	psql := db.Connect(dbURL)
+	// run migrations
+	db.MigrateUp(dbURL)
 	defer psql.CloseConnection()
 	r := mux.NewRouter().StrictSlash(false)
 
