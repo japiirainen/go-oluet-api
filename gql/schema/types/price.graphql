@@ -10,7 +10,7 @@ type Price {
   """
   ID of the product
   """
-  productId: String!
+  productID: String!
   """
   Price of the product
   """

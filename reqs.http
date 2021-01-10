@@ -1,0 +1,26 @@
+
+POST https://oluet-api.xyz/query
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+    beersearch(term: "karhu") {
+        nimi
+        productID
+        litraHinta
+    }
+}
+
+###
+
+POST https://oluet-api.xyz/query
+Content-Type: application/json
+X-REQUEST-TYPE: GraphQL
+
+query {
+    pricehistory(productID: "796454") {
+        date
+        productId
+        hinta
+    }
+}
