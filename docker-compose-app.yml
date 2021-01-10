@@ -6,7 +6,7 @@ services:
       context: .
     environment: 
       PORT: 5000
-      DATABASE_URL: postgres://dev:dev@localhost:5432/oluet_api_dev?sslmode=disable
+      DATABASE_URL: postgres://dev:dev@db:5432/oluet_api_dev?sslmode=disable
     depends_on: 
       - db
     ports: 
