@@ -7,7 +7,9 @@ API for finding information about you favorive alcoholic beverages!😎
 
 ## This is a rewrite of my oluet-api in go!
 
-###The poject was originally written in nodejs, but I decided to start learning glo and thought this was a good place to start exploring!
+### The poject was originally written in nodejs, but I decided to start learning glo and thought this was a good place to start exploring!
 
-## TODO
-1. maybe make a separate type for olut
+## Links
+- [Homepage](https://oluet-api.xyz)
+- [Graphql playground](https://oluet-api.xyz/graphql)
+- [API](https://oluet-api.xyz/query)
