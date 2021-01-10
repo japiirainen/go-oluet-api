@@ -21,7 +21,7 @@ migrate-up:
 migrate-down:
 	- migrate -database postgres://dev:dev@localhost:5432/oluet_api_dev?sslmode=disable -path db/migrations/postgres down
 
-dh:
-	- ./dh.sh
+publish:
+	- ./publish.sh
 
 .PHONY: compose-app compose-dbs gen build

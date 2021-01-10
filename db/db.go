@@ -2,18 +2,34 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
 	"os"
 
-	"github.com/japiirainen/go-oluet-api/helpers"
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	log "github.com/sirupsen/logrus"
 )
 
+var dbURL = os.Getenv("DATABASE_URL")
+
 //Db is the database connection
 type Db struct {
 	conn *sql.DB
+}
+
+//MigrateUp runs migrations
+func MigrateUp() {
+	m, err := migrate.New(
+		"file://db/migrations",
+		dbURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := m.Up(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 // Connect makes a postgres connection
@@ -24,15 +40,8 @@ func Connect() *Db {
 		panic("env not found")
 	}
 
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		os.Getenv("PG_HOST"),
-		helpers.ToInt(os.Getenv("PG_PORT")),
-		os.Getenv("PG_USER"),
-		os.Getenv("PG_PASSWORD"),
-		os.Getenv("PG_DBNAME"))
-
 	// open database
-	conn, dbErr := sql.Open("postgres", psqlconn)
+	conn, dbErr := sql.Open("postgres", dbURL)
 	if dbErr != nil {
 		log.Panic(dbErr)
 	}
