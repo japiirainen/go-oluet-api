@@ -16,6 +16,7 @@ COPY --from=builder /go/src/github.com/japiirainen/go-oluet-api/app .
 COPY --from=builder /go/src/github.com/japiirainen/go-oluet-api/.env.production .env
 COPY --from=builder /go/src/github.com/japiirainen/go-oluet-api/db/migrations/postgres ./db/migrations/postgres
 COPY --from=builder /go/src/github.com/japiirainen/go-oluet-api/exel/data ./exel/data
+COPY --from=builder /go/src/github.com/japiirainen/go-oluet-api/public/html ./public/html
 
 EXPOSE 5000
 

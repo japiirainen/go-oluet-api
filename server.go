@@ -50,7 +50,7 @@ func main() {
 
 	//Home routes
 	home := r.Path("/").Subrouter()
-	home.Methods("GET").HandlerFunc(handlers.HomeHandler)
+	home.Methods("GET").Handler(http.FileServer(http.Dir("./public/html/")))
 
 	//internal routes
 	internalBase := mux.NewRouter()

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;600&display=swap');
+      html,
+      body {
+        font-family: 'Roboto Mono', monospace;
+      }
+      .main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        max-width: 700px;
+        margin: 2rem auto 4rem;
+        max-width: 90vw;
+        width: 600px;
+      }
+      .heading {
+        font-size: 60px;
+        text-align: center;
+        margin-bottom: 5px;
+      }
+      .imagecontainer,
+      .docscontainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      .footer {
+        margin-top: 30px;
+      }
+      .code {
+        font-size: 16px;
+        padding: 10px 20px 10px 20px;
+        background-color: gray;
+        color: white;
+        border-radius: 5px;
+      }
+      .divider {
+        border: 1px solid black;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oluet-api</title>
+  </head>
+  <body>
+    <div class="main">
+      <h1 class="heading">Oluet API</h1>
+      <div class="imagecontainer">
+        <img
+          src="http://www.heldercervantes.com/images/beer.svg"
+          alt="cool beer picture"
+        />
+      </div>
+      <div class="introcontainer">
+        <p>
+          Have you ever wanted to search through Alko's expansive back catalogue
+          of beer and other drinks in a programmatic way? Maybe build a tool
+          that pairs drinks with food? Or maybe just try to find beer an abv of
+          more than 5% Well now you can finally do that!
+        </p>
+        <p>
+          Oluet API takes Alko's catalogue and makes it searchable throug an
+          Graphql endpoint! And on top of all that it's completely free and open
+          source!
+        </p>
+        <p>
+          But that's not where the fun stops :-). Oluet API also takes collects
+          the pricehistory for all the products in Alko's selection and makes it
+          possible to query past and current prices easily!
+        </p>
+      </div>
+      <div class="docscontainer">
+        <h2>API documentation v1</h2>
+        <h4>Graphql endpoint</h4>
+        <p>
+          This endpoint is used by all of the queries. You should read the
+          official graphql documentation on more information about the
+          technology if it's new for you!
+          <a target="_blank" href="https://graphql.org/">Graphal docs</a>
+        </p>
+        <code class="code">https://oluet-api.xyz/query</code>
+        <div class="divider"></div>
+        <h4>Graphql playground</h4>
+        <p>
+          If you are not yet familiar with graphql you are going to love the
+          playground! There is no need to use tools like Postman with graphql
+          since you can test your queries straight from the playground! You
+          should also see the docs for playground to utilize it's full
+          potential!
+          <a
+            target="_blank"
+            href="https://github.com/graphql/graphql-playground"
+            >Graphql playground docs</a
+          >
+        </p>
+        <code class="code">https://oluet-api.xyz/graphql</code>
+        <div class="divider"></div>
+        <h4>Sample queries to get you started</h4>
+        <p>You experiment with these at the playground.</p>
+        <div class="divider"></div>
+        <p>List all drinks</p>
+        <code class="code"
+          >query { drinks { nimi date productID hinta tyyppi }}</code
+        >
+        <div class="divider"></div>
+        <p>List all beer</p>
+        <code class="code"
+          >query { beers { id nimi hinnastoJarjestysKoodi valmistaja huomautus }
+          }</code
+        >
+        <div class="divider"></div>
+        <p>Search for all "karhu" beers</p>
+        <code class="code"
+          >query { beersearch(term: "karhu") { productID alkoholiProsentti nimi
+          tyyppi alaTyyppi } }</code
+        >
+        <div class="divider"></div>
+        <p>Search for the pricehistory of a product</p>
+        <code class="code"
+          >{ pricehistory(productID:"792176") { hinta date } }</code
+        >
+      </div>
+
+      <footer class="footer">
+        <p>
+          Made by
+          <a target="_blank" href="https://github.com/japiirainen"
+            >@japiirainen</a
+          >
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
