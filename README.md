@@ -16,8 +16,84 @@ API for finding information about you favorive alcoholic beverages!😎
 
 If you don't know graphql playground is a great place to try out some queries straight from you favorite browser. Give it a shot!
 
+## API documentation v1
+
+### Graphql endpoint
+
+This endpoint is used by all of the queries. You should read the
+official graphql documentation on more information about the
+technology if it's new for you!
+[Graphal docs](https://graphql.org)
+```
+https://oluet-api.xyz/query
+```
+
+### Graphql playground endpoint
+
+If you are not yet familiar with graphql you are going to love the
+playground! There is no need to use tools like Postman with graphql
+since you can test your queries straight from the playground! You
+should also see the docs for playground to utilize it's full
+potential!
+[Graphal playground docs](https://github.com/graphql/graphql-playground)
+```
+https://oluet-api.xyz/graphql
+```
+
+### Sample queries
+
+You can experiment with these at the playground!
+
+### List all drinks
+```
+query {
+    drinks {
+        nimi
+        date
+        productID
+        hinta
+        tyyppi
+    }
+}
+```
+
+### List all beers
+```
+query {
+    beers {
+        nimi
+        date
+        olutTyyppi
+        hinta
+        tyyppi
+    }
+}
+```
+
+### Search for all "karhu" beers
+```
+query {
+    beersearch(term: "karhu") {
+        nimi
+        date
+        valmistaja
+        huomautus
+        olutTyyppi
+        hinta
+        tyyppi
+    }
+}
+```
+
+### Search for all "karhu" beers
+```
+query {
+    pricehistory(productID:"792176") {
+        hinta
+        date 
+    }
+ }
+```
+
 ## TODO
 1. maybe make a separate type for olut
-2. maybe add some small landing page
-3. add examples
-4. give some basic info
