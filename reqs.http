@@ -20,7 +20,7 @@ X-REQUEST-TYPE: GraphQL
 query {
     pricehistory(productID: "796454") {
         date
-        productId
+        productID
         hinta
     }
 }
