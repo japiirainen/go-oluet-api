@@ -18,7 +18,7 @@
         width: 600px;
       }
       .heading {
-        font-size: 60px;
+        font-size: 40px;
         text-align: center;
         margin-bottom: 5px;
       }
@@ -27,6 +27,12 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+      }
+      .headingcontainer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
       }
       .footer {
         margin-top: 30px;
@@ -43,6 +49,21 @@
         margin-top: 20px;
         margin-bottom: 20px;
       }
+      .gh-logo {
+        width: 32px;
+        height: 32px;
+      }
+      .gh-link {
+        margin-top: 30px;
+        margin-left: 50px;
+      }
+      .gh-logo:hover {
+        cursor: pointer;
+      }
+      .beer-logo {
+        width: 300px;
+        height: 300px;
+      }
     </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,13 +71,15 @@
   </head>
   <body>
     <div class="main">
-      <h1 class="heading">Oluet API</h1>
-      <div class="imagecontainer">
-        <img
-          src="http://www.heldercervantes.com/images/beer.svg"
-          alt="cool beer picture"
-        />
+      <div class="headingcontainer">
+        <h1 class="heading">Oluet API</h1>
+        <a href="https://github.com/japiirainen/go-oluet-api" target="_blank" class="gh-link" ><img class="gh-logo" src="https://cdn.afterdawn.fi/v3/news/original/github-logo.png"/></a>
       </div>
+      <img 
+      src="http://www.heldercervantes.com/images/beer.svg"
+      alt="cool beer picture"
+      class="beer-logo"
+    />
       <div class="introcontainer">
         <p>
           Have you ever wanted to search through Alko's expansive back catalogue
@@ -65,7 +88,7 @@
           more than 5% Well now you can finally do that!
         </p>
         <p>
-          Oluet API takes Alko's catalogue and makes it searchable throug an
+          Oluet API takes Alko's catalogue and makes it searchable through an
           Graphql endpoint! And on top of all that it's completely free and open
           source!
         </p>
@@ -84,7 +107,7 @@
           technology if it's new for you!
           <a target="_blank" href="https://graphql.org/">Graphal docs</a>
         </p>
-        <code class="code">https://oluet-api.xyz/query</code>
+        <code class="code"><a href="https://oluet-api.xyz/query" target="_blank" style="text-decoration: none; color: white;">https://oluet-api.xyz/query</a></code>
         <div class="divider"></div>
         <h4>Graphql playground</h4>
         <p>
@@ -99,7 +122,7 @@
             >Graphql playground docs</a
           >
         </p>
-        <code class="code">https://oluet-api.xyz/graphql</code>
+        <code class="code"><a href="https://oluet-api.xyz/graphql" target="_blank" style="text-decoration: none; color: white;">https://oluet-api.xyz/graphql</a></code>
         <div class="divider"></div>
         <h4>Sample queries to get you started</h4>
         <p>You experiment with these at the playground.</p>
@@ -136,5 +159,6 @@
         </p>
       </footer>
     </div>
+  </div>
   </body>
 </html>
