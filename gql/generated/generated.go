@@ -358,7 +358,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Price.ID(childComplexity), true
 
-	case "Price.productId":
+	case "Price.productID":
 		if e.complexity.Price.ProductID == nil {
 			break
 		}
@@ -544,36 +544,129 @@ scalar Upload
 }
 `, BuiltIn: false},
 	{Name: "gql/schema/types/drink.graphql", Input: `type Drink {
+  """
+  ID for internal usage
+  """
   id: ID!
+  """
+  Date of creation
+  """
   date: Time!
+  """
+  Product's id provided by Alko
+  """
   productID: ID!
+  """
+  Name of the product
+  """
   nimi: String
+  """
+  Manifacturer of the product
+  """
   valmistaja: String
+  """
+  Bottle size
+  """
   pulloKoko: String
+  """
+  Price of the product
+  """
   hinta: Float!
+  """
+  Price per litre of the product
+  """
   litraHinta: Float
+  """
+  Wheter the product is recently added to the Alko collection of products
+  """
   uutuus: String
+  """
+  Some id propably that Alko propably uses internally?
+  """
   hinnastoJarjestysKoodi: String
+  """
+  Type of the product
+  """
   tyyppi: String
+  """
+  Lower type of the product
+  """
   alaTyyppi: String
+  """
+  Special group of the product
+  """
   erityisRyhma: String
+  """
+  Type of the beer
+  """
   olutTyyppi: String
+  """
+  Manifacturing country
+  """
   valmistusMaa: String
+  """
+
+  """
   alue: String
+  """
+  Area where the product is produced in?
+  """
   vuosiKerta: String
+  """
+  Etiquette markings
+  """
   etikettiMerkintoja: String
+  """
+  Notes about the product
+  """
   huomautus: String
+  """
+  The kind of grape
+  """
   rypaleet: String
+  """
+  Characterization of the product
+  """
   luonnehdinta: String
+  """
+  Packaging type
+  """
   pakkausTyyppi: String
+  """
+  Closing type
+  """
   suljentaTyyppi: String
+  """
+  Alcohol percentage
+  """
   alkoholiProsentti: String
+  """
+  Acid level (g/l)
+  """
   hapotGL: String
+  """
+  Amout of sugar (g/l)
+  """
   sokeriGL: Int
+  """
+  ????
+  """
   kantavierrep: Float
+  """
+  Color of the product
+  """
   vari: String
+  """
+  Bitternes
+  """
   katkerot: String
+  """
+  Amout of calories per 100 ml
+  """
   energia100ML: String
+  """
+  Selection
+  """
   valikoima: String
 }
 `, BuiltIn: false},
@@ -589,7 +682,7 @@ scalar Upload
   """
   ID of the product
   """
-  productId: String!
+  productID: String!
   """
   Price of the product
   """
@@ -1790,7 +1883,7 @@ func (ec *executionContext) _Price_date(ctx context.Context, field graphql.Colle
 	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Price_productId(ctx context.Context, field graphql.CollectedField, obj *model.Price) (ret graphql.Marshaler) {
+func (ec *executionContext) _Price_productID(ctx context.Context, field graphql.CollectedField, obj *model.Price) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -3416,8 +3509,8 @@ func (ec *executionContext) _Price(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "productId":
-			out.Values[i] = ec._Price_productId(ctx, field, obj)
+		case "productID":
+			out.Values[i] = ec._Price_productID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
