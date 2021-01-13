@@ -65,7 +65,7 @@ func ReadXlsx(filepath string) ([]Drink, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	res := []Drink{}
+	var res []Drink
 
 	date := strings.TrimPrefix(rows[0][0], "Alkon hinnasto ")
 	parsedDate := helpers.ParseTime(date)
@@ -103,6 +103,7 @@ func ReadXlsx(filepath string) ([]Drink, error) {
 			Valikoima:              row[28]}
 		res = append(res, temp)
 	}
+	fmt.Printf("%v\n", res[0])
 	return res, nil
 }
 
