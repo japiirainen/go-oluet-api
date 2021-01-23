@@ -22,13 +22,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-const defaultPort = "5000"
-
 func main() {
 	var wait time.Duration
 	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration for which the server gracefully wait for existing connections to finish - e.g. 15s or 1m")
 	flag.Parse()
-
 	// load env
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -40,18 +37,16 @@ func main() {
 	log.SetFormatter(&log.TextFormatter{})
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = defaultPort
+		port = "5000"
 	}
 	psql := db.Connect(dbURL)
 	// run migrations
 	db.MigrateUp(dbURL)
 	defer psql.CloseConnection()
 	r := mux.NewRouter().StrictSlash(false)
-
 	//Home routes
 	home := r.Path("/").Subrouter()
 	home.Methods("GET").Handler(http.FileServer(http.Dir("./public/html/")))
-
 	//internal routes
 	internalBase := mux.NewRouter()
 	r.PathPrefix("/internal").Handler(negroni.New(
@@ -62,7 +57,6 @@ func main() {
 	internal := internalBase.PathPrefix("/internal").Subrouter()
 	internal.Methods("GET").HandlerFunc(handlers.GetInternal)
 	internal.Methods("POST").HandlerFunc(handlers.DailyUpdate)
-
 	//graphql routes
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolvers.Resolver{
 		DB: psql,
@@ -71,7 +65,6 @@ func main() {
 	r.Handle("/query", srv)
 	log.Infof("playground @ -> http://localhost:%s/graphql", port)
 	log.Infof("query graphql @ -> http://localhost:%s/query", port)
-
 	s := &http.Server{
 		Handler: r,
 		Addr:    fmt.Sprintf(":%s", port),
@@ -84,14 +77,13 @@ func main() {
 			log.Println(err)
 		}
 	}()
-
-	//allow the server to close gracefully
+	// ? allow the server to close gracefully
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt)
 	<-ch
 	ctx, cancel := context.WithTimeout(context.Background(), wait)
 	defer cancel()
 	s.Shutdown(ctx)
-	log.Println("shutting down")
+	log.Info("shutting down")
 	os.Exit(0)
 }
